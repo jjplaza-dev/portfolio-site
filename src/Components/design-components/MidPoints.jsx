@@ -112,6 +112,7 @@ export const MidPointsManager = ({ children }) => {
             stroke="gray"
             strokeWidth="2"
             opacity={Math.max(0, 1 - (point.dist / 300))} 
+           
           />
         ))}
       </svg>
@@ -142,7 +143,7 @@ export const MidPoints = () => {
   return (
     <div 
       ref={elRef} 
-      className="w-1 h-1 bg-black rounded-full relative z-10"
+      className="w-1 h-1 bg-black rounded-full relative z-0"
     ></div>
   );
 };

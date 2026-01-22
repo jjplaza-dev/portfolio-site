@@ -5,6 +5,7 @@ import { Box, Edges, Instance, OrbitControls, Sphere } from '@react-three/drei'
 import StudioLights from './three/StudioLights'
 import PlatedBackground from './design-components/PlatedBackground'
 import { MidPoints, MidPointsManager } from './design-components/MidPoints'
+import FrontSection from './FrontSection'
 
 
 const HomeFront = () => { 
@@ -22,10 +23,21 @@ const HomeFront = () => {
                     </> 
                 ))}   
             </Canvas> */}
-            <PlatedBackground />
-            <div className='w-full take-up-space h-100 bg-white'></div>
-    
-            
+            <section className='w-screen h-screen overflow-hidden relative'>
+                <PlatedBackground />
+                <FrontSection />
+            </section>
+            <section className='w-full h-screen lower-main bg-black'>
+
+            </section>    
+            <section className='w-screen h-screen overflow-hidden relative'>
+                <PlatedBackground />
+                <div className='w-full h-screen absolute top-0' style={{background: 'linear-gradient(to bottom, #000000 0%, #000000 30%, #11111100 60%)'}}></div>
+            </section>    
+            <section className='w-screen h-screen overflow-hidden relative'>
+                <PlatedBackground />
+                <div className='w-full h-screen absolute bottom-0' style={{background: 'linear-gradient(to top, #000000 0%, #000000 30%, #11111100 60%)'}}></div>
+            </section> 
         </main>
     </>
   )

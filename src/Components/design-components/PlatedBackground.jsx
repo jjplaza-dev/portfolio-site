@@ -28,16 +28,16 @@ const PlatedBackground = () => {
     <MidPointsManager>
       <main 
         ref={containerRef} 
-        className='w-screen h-[100vh] relative bg-black border-2 border-white flex flex-wrap content-start overflow-hidden mx-auto'
+        className='w-screen h-screen z-[-1] bg-black flex flex-wrap content-start overflow-hidden mx-auto'
       >
         {Array.from({ length: plateCount }).map((_, index) => (
             <div key={index + 'a'}>
-                <Plates key={index} bgColor={'#11111190'}/>
-                <MidPoints key={index + 'b'} />
+                <Plates key={index}/>
+                {/* <MidPoints key={index + 'b'} /> */}
             </div>
           
         ))}
-        <div className='w-full h-screen absolute bottom-0' style={{background: 'linear-gradient(to top, #000000 0%, #000000 30%, #11111100 60%)'}}></div>
+        
       </main>
     </MidPointsManager>
   );
