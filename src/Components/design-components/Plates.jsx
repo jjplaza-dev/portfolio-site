@@ -1,28 +1,39 @@
 import React, { useEffect, useState } from 'react'
 
 const Plates = (props) => {
-  const [isActive, setIsActive] = useState(true); // Currently not used
-  const [colorChange, setColorChange] = useState(true); // Currently not used
-  const boxSize = 40;
+  // Default to visible (false means "not flickering", so opacity is normal)
+  const [isFlickering, setIsFlickering] = useState(false); 
 
+  useEffect(() => {
+    // Run this check every 1000ms (1 second)
+    const interval = setInterval(() => {
+      
+      // 5% chance to trigger the flicker
+      if (Math.random() < 0.01) {
+        setIsFlickering(true);
 
-/*   useEffect(() => {
-    const interval = setTimeout(() => {
-      setIsActive(prev => !prev);
-        
-      setTimeout(() => {
-        setColorChange(prev => !prev);
-      } , 1000);
-    } , 1000); 
+        // "Go back to original" after a short delay (e.g., 200ms)
+        // This creates a quick "glitch" out and back in
+        setTimeout(() => {
+          setIsFlickering(false);
+        }, 2000); 
+      }
 
-    return () => clearTimeout(interval);
-  }, []); */
+    }, 2000); 
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
    <section className='overflow-hidden'>
         <div 
-          style={{ width: boxSize, height: boxSize, clipPath: 'polygon(100% 10%, 90% 0%, 10% 0%, 0% 10%, 0% 90%, 10% 100%, 90% 100%, 100% 90%)' }} 
-          className={`aspect-square m-[1.5px] duration-1000 transition-all ${isActive ? 'translate-x-0' : 'translate-x-[110%]'} ${colorChange ? 'bg-[#11111140]' : 'bg-[#11111190]'}`}
+          style={{ 
+            clipPath: 'polygon(100% 10%, 90% 0%, 10% 0%, 0% 10%, 0% 90%, 10% 100%, 90% 100%, 100% 90%)' 
+          }} 
+          
+          className={`w-full h-full duration-2000 border-[0.5px] border-white/5 transition-all
+            ${isFlickering ? 'opacity-100' : 'opacity-80'} 
+          `}
         ></div>
    </section>
   )

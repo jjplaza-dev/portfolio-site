@@ -1,45 +1,37 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Plates from './Plates';
-import { MidPointsManager, MidPoints } from './MidPoints';
-
+import { MidPointsManager } from './MidPoints';
 
 const PlatedBackground = () => {
-  const containerRef = useRef(null);
-  const [plateCount, setPlateCount] = useState(0);
+  const [isLandscape, setIsLandscape] = useState(true);
 
   useEffect(() => {
-    const calculatePlates = () => {
-      if (containerRef.current) {
-        const { offsetWidth , offsetHeight } = containerRef.current;
-        const PLATE_SIZE = 42;
-        const columns = Math.ceil(offsetWidth / PLATE_SIZE);
-        const rows = Math.ceil(offsetHeight / PLATE_SIZE);
-
-        setPlateCount(columns * rows);
-      }
+    // 1. Orientation Logic
+    const handleResize = () => {
+      setIsLandscape(window.innerWidth > window.innerHeight);
     };
-    calculatePlates();
 
-    window.addEventListener('resize', calculatePlates);
-    return () => window.removeEventListener('resize', calculatePlates);
+    // Initial check
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
-    <MidPointsManager>
       <main 
-        ref={containerRef} 
-        className='w-screen h-screen z-[-1] bg-black flex flex-wrap content-start overflow-hidden mx-auto'
+        className={`w-full h-screen z-[-1] bg-black mx-auto overflow-hidden grid
+          ${isLandscape ? 'grid-cols-5 grid-rows-4' : 'grid-cols-4 grid-rows-5'}
+        `}
       >
-        {Array.from({ length: plateCount }).map((_, index) => (
-            <div key={index + 'a'}>
-                <Plates key={index}/>
-                {/* <MidPoints key={index + 'b'} /> */}
-            </div>
-          
+        {/* We render exactly 20 plates. 
+           (5x4 = 20, 4x5 = 20)
+        */}
+        {Array.from({ length: 20 }).map((_, index) => (
+            <Plates />
         ))}
         
       </main>
-    </MidPointsManager>
   );
 };
 

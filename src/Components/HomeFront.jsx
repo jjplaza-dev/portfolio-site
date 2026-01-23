@@ -11,8 +11,8 @@ import FrontSection from './FrontSection'
 const HomeFront = () => { 
  
   return (
-    <>
-        <main className='home-front'>
+    <>        
+        <main className='home-front w-full min-h-screen overflow-x-hidden bg-black'>
             {/* <Navigation /> */}
             {/* <Canvas className='myCanvas' camera={{position: [0, 0, -20], fov: 100, near: 0.1, far: 100}}>
                 <OrbitControls enableZoom={true}/>
@@ -23,24 +23,30 @@ const HomeFront = () => {
                     </> 
                 ))}   
             </Canvas> */}
-            <section className='w-screen h-screen overflow-hidden relative'>
+            
+            {/* First Section: Remains h-screen to fill the initial view */}
+            <section className='w-full h-screen relative'>
                 <PlatedBackground />
                 <FrontSection />
             </section>
-            <section className='w-full h-screen lower-main bg-black'>
 
+            {/* Subsequent Sections: Removed 'snap-start' */}
+            <section className='w-full h-screen lower-main bg-white border border-black'>
+                 {/* Section 2 Content */}
             </section>    
-            <section className='w-screen h-screen overflow-hidden relative'>
-                <PlatedBackground />
-                <div className='w-full h-screen absolute top-0' style={{background: 'linear-gradient(to bottom, #000000 0%, #000000 30%, #11111100 60%)'}}></div>
-            </section>    
-            <section className='w-screen h-screen overflow-hidden relative'>
-                <PlatedBackground />
-                <div className='w-full h-screen absolute bottom-0' style={{background: 'linear-gradient(to top, #000000 0%, #000000 30%, #11111100 60%)'}}></div>
-            </section> 
+
+            <section className='w-full h-screen lower-main bg-white border border-black'>
+                 {/* Section 3 Content */}
+            </section>   
+
+            <section className='w-full h-screen lower-main bg-white border border-black'>
+                 {/* Section 4 Content */}
+            </section>   
+            
         </main>
     </>
   )
 }
 
 export default HomeFront
+

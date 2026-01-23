@@ -1,9 +1,8 @@
 @import "tailwindcss";
 
 html {
-    background-color: black;
+    background-color: white;
     overflow-x: hidden;
-    height: 500vh;
     color: white;
 }
 
@@ -40,6 +39,26 @@ h5 {
 
 p {
   font-size: var(--p-size);
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important; /* Disable native smooth scroll */
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }
 
 
@@ -83,6 +102,6 @@ p {
 }
 
 .front-section {
-  background: linear-gradient(to top, #000000 0%, #000000 30%, #11111100 60%);
+  background: linear-gradient(to top, #000000 0%, #000000 10%, #11111100 60%);
   @apply w-full h-screen absolute bottom-0;
 }
