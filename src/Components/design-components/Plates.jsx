@@ -31,7 +31,7 @@ const Plates = (props) => {
             clipPath: 'polygon(100% 10%, 90% 0%, 10% 0%, 0% 10%, 0% 90%, 10% 100%, 90% 100%, 100% 90%)' 
           }} 
           
-          className={`w-full h-full duration-2000 border-[0.5px] border-white/5 transition-all
+          className={`w-full h-full duration-2000 border-[0.5px] border-black/10 transition-all
             ${isFlickering ? 'opacity-100' : 'opacity-80'} 
           `}
         ></div>

@@ -6,7 +6,7 @@ import Navigation from './Components/Navigation'
 import { ScrollTrigger } from 'gsap/ScrollTrigger' // Recommended for syncing
 import * as THREE from 'three'
 import Lenis from 'lenis'
-import LoadingScreen from './Components/LoadingScreen'
+import ProjectSection from './Components/ProjectSection'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -32,6 +32,8 @@ function App() {
       lenis.raf(time * 1000)
     })
     
+    window.scrollTo(0, 0);
+    
     gsap.ticker.lagSmoothing(0)
 
     return () => {
@@ -42,9 +44,11 @@ function App() {
 
   return (
     <>
-      <LoadingScreen />
+      {/* <LoadingScreen /> */}
       <Navigation />
       <HomeFront />
+      <ProjectSection />
+      <div className='blank-element w-full h-screen'></div>
       <CursorDot />
     </>
   )

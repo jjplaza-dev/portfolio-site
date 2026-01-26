@@ -1,60 +1,76 @@
 import React, { useState } from 'react'
+import PixelWord from './design-components/PixelWord';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Toggle function
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  // Define items here to easily map delays
+  const navItems = ['ABOUT', 'PROJECTS', 'CONTACT'];
 
   return (
     <>
-      {/* 1. NAVIGATION BAR 
-         - z-50: Ensures it sits ON TOP of the modal (which is z-40)
-         - mix-blend-difference: Inverts colors so it's visible on both white pages and black modals 
-      */}
-      <nav className='fixed top-0 w-full flex justify-between items-center p-6 z-50 mix-blend-difference text-white'>
+      <nav className='fixed top-0 w-full flex justify-between items-center p-6 z-50 text-white'>
         
+        {/* Brand / Logo */}
+        <div className="font-bold tracking-wider"></div>
 
-        {/* 2. DESKTOP LINKS 
-           - hidden: Hidden on mobile
-           - lg:flex: Visible on large screens
-        */}
-        <section className='hidden lg:flex gap-8 absolute right-[20%] font-bold tracking-widest uppercase text-sm'>
-          <button className='px-3 py-1'>About</button>
-          <button className='px-3 py-1'>Projects</button>
-          <button className='px-3 py-1'>Contact</button>
-        </section>
-
-        {/* 3. MOBILE MENU BUTTON 
-           - lg:hidden: Hidden on Desktop
-           - ml-auto: Pushes it to the right
-           - It resides inside the z-50 nav, so it will always be above the modal
-        */}
+        {/* --- MENU TOGGLE BUTTON --- */}
         <button 
           onClick={toggleMenu}
-          className='lg:pointer-events-none ml-auto w-fit h-fit grid grid-cols-2 gap-2 group cursor-pointer p-1'
+          className='ml-auto w-fit h-fit grid grid-cols-2 gap-2 group cursor-pointer p-2 relative z-50 bg-black rounded-full'
         >
-          {/* Animated Dots: Rotate into a generic shape or cross when open */}
-          <div className={`w-1.5 h-1.5 rounded-full bg-white transition-transform duration-300 ${isOpen ? 'translate-x-[2.5px] translate-y-[2.5px]' : ''}`}></div>
-          <div className={`w-1.5 h-1.5 rounded-full bg-white transition-transform duration-300 ${isOpen ? '-translate-x-[2.5px] translate-y-[2.5px]' : ''}`}></div>
-          <div className={`w-1.5 h-1.5 rounded-full bg-white transition-transform duration-300 ${isOpen ? 'translate-x-[2.5px] -translate-y-[2.5px]' : ''}`}></div>
-          <div className={`w-1.5 h-1.5 rounded-full bg-white transition-transform duration-300 ${isOpen ? '-translate-x-[2.5px] -translate-y-[2.5px]' : ''}`}></div>
+          <div className={`w-2 h-2 rounded-full bg-white transition-transform duration-300 ${isOpen ? 'translate-x-[2.5px] translate-y-[2.5px]' : ''}`}></div>
+          <div className={`w-2 h-2 rounded-full bg-white transition-transform duration-300 ${isOpen ? '-translate-x-[2.5px] translate-y-[2.5px]' : ''}`}></div>
+          <div className={`w-2 h-2 rounded-full bg-white transition-transform duration-300 ${isOpen ? 'translate-x-[2.5px] -translate-y-[2.5px]' : ''}`}></div>
+          <div className={`w-2 h-2 rounded-full bg-white transition-transform duration-300 ${isOpen ? '-translate-x-[2.5px] -translate-y-[2.5px]' : ''}`}></div>
         </button>
+
+        {/* --- DROPDOWN CONTAINER --- */}
+        <div 
+          className={`
+            bg-white border border-white/20 p-4 z-40
+            transition-all duration-300 ease-in-out origin-top-right
+            absolute top-16 right-6 flex
+            flex-col items-end w-auto
+            
+            ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}
+          `} style={{ transitionDelay: isOpen ? '0ms' : '400ms'}}
+        >
+
+          {/* --- MAPPED BUTTONS WITH STAGGERED DELAY --- */}
+          {navItems.map((item, index) => (
+            <button 
+              key={item} 
+              className='text-white hover:text-gray-400 transition-colors py-4 px-2 overflow-hidden'
+            >
+              {/* Inner container handles the slide movement */}
+              <div 
+                className={`transition-transform duration-500 ease-out will-change-transform
+                  ${isOpen ? 'translate-y-0' : 'translate-y-[-200%]'}
+                `}
+                style={{ 
+                  // 1. Stagger Delay: Multiply index by 100ms (0ms, 100ms, 200ms...)
+                  // 2. Conditional: Only apply delay when opening. When closing, reset instantly for snappier feel.
+                  transitionDelay: isOpen ? `${index * 200}ms` : `${index * 100}ms`
+                }}
+              >
+                <PixelWord text={item} size={4} color='black'/>
+              </div>
+            </button>
+          ))}
+
+        </div>
+
       </nav>
 
-      {/* 4. FULL SCREEN MODAL 
-         - z-40: Sits BEHIND the nav (z-50) so the button is never covered
-         - fixed inset-0: Covers entire screen
-      */}
-      <div 
-        className={`fixed inset-0 bg-black z-40 flex flex-col justify-center items-center gap-10 transition-opacity duration-300 ease-in-out
-          ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-        `}
-      >
-        <button className='text-xl px-4 py-2 font-black uppercase tracking-tighter text-white hover:text-gray-500 transition-colors'>About</button>
-        <button className='text-xl px-4 py-2 font-black uppercase tracking-tighter text-white hover:text-gray-500 transition-colors'>Projects</button>
-        <button className='text-xl px-4 py-2 font-black uppercase tracking-tighter text-white hover:text-gray-500 transition-colors'>Contact</button>
-      </div>
+      {isOpen && (
+        <div 
+          onClick={() => setIsOpen(false)} 
+          className="fixed inset-0 z-30 bg-transparent cursor-default" 
+        />
+      )}
     </>
   )
 }

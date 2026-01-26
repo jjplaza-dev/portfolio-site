@@ -46,7 +46,7 @@ const FONT_MAP = {
   '-': ['00000','00000','00000','11111','00000','00000','00000','00000'],
 };
 
-const PixelWord = ({ text = "HELLO", size = 4, gap = 1 }) => {
+const PixelWord = ({ text = "HELLO", size = 4, gap = 1 , color = "white"}) => {
   
   // Convert word to array of characters
   const characters = useMemo(() => {
@@ -76,7 +76,7 @@ const PixelWord = ({ text = "HELLO", size = 4, gap = 1 }) => {
                     width: `${size}px`,
                     height: `${size}px`,
                     // Only render background if pixel is '1'
-                    backgroundColor: pixel === '1' ? 'white' : 'transparent',
+                    backgroundColor: pixel === '1' ? `${color}` : 'transparent',
                     // Optional: Add a tiny shadow for "glow" effect since it's pixel art
                     boxShadow: pixel === '1' ? '0 0 2px rgba(255,255,255,0.3)' : 'none'
                   }}

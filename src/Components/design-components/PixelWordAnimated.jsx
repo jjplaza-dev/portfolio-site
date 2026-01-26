@@ -46,7 +46,7 @@ const FONT_MAP = {
   '-': ['00000','00000','00000','11111','00000','00000','00000','00000'],
 };
 
-const PixelUnit = ({ pixel, size }) => {
+const PixelUnit = ({ pixel, size}) => {
   const [mounted, setMounted] = useState(false);
   const [animationFinished, setAnimationFinished] = useState(false);
   
@@ -60,9 +60,9 @@ const PixelUnit = ({ pixel, size }) => {
     if (pixel === '0') return;
 
     // Random Delay before starting (100ms - 2000ms)
-    const delay = Math.floor(Math.random() * 1900) + 100;
+    const delay = Math.floor(Math.random() * 1000) + 200;
     // Animation Duration (must match CSS transition duration)
-    const duration = 1500; 
+    const duration = 1000; 
 
     // Step A: Trigger the fly-in
     const startTimer = setTimeout(() => {
@@ -109,8 +109,8 @@ const PixelUnit = ({ pixel, size }) => {
     // Opacity: 'ease-in' + slightly longer duration ensures it stays invisible longer 
     // and only fades in "nearing the end"
     transition: `
-      transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
-      opacity 1.5s ease-in
+      transform 1s cubic-bezier(0.2, 0.8, 0.2, 1), 
+      opacity 1s ease-in
     `,
 
     backgroundColor: pixel === '1' ? 'white' : 'transparent',

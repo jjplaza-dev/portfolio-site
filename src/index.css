@@ -4,12 +4,13 @@ html {
     background-color: white;
     overflow-x: hidden;
     color: white;
+    height: 1000vh;
 }
 
 
 :root {
-  --h1-size: clamp(2rem, 4vw + 1.5rem, 8rem);
-  --h2-size: clamp(1.5rem, 3.5vw + 0.5rem, 2rem);
+  --h1-size: clamp(2rem, 10vw + 2rem, 20rem);
+  --h2-size: clamp(1.5rem, 5vw + 1rem, 4rem);
   --h3-size: clamp(1.2rem, 3vw + 0.25rem, 1.5rem);
 
   --h4-size: clamp(1rem, 2.5vw + 0.2rem, 1.25rem);
@@ -65,7 +66,7 @@ html.lenis, html.lenis body {
 .zalando{
   font-family: "Zalando Sans", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 400;
+  font-weight: 900;
   font-style: normal;
   font-variation-settings:
     "wdth" 100;
@@ -103,5 +104,5 @@ html.lenis, html.lenis body {
 
 .front-section {
   background: linear-gradient(to top, #000000 0%, #000000 10%, #11111100 60%);
-  @apply w-full h-screen absolute bottom-0;
+  @apply w-full h-screen;
 }
