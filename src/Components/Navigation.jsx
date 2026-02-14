@@ -1,30 +1,96 @@
-import React, { useState } from 'react'
-import PixelWord from './design-components/PixelWord';
+import React, { useState, useEffect, useRef } from 'react'
+import gsap from 'gsap';
+import { Clock } from 'lucide-react';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [time, setTime] = useState("");
+  
+  const marqueeRef = useRef(null);
+  const navItems = ['PROJECTS', 'ABOUT ME', 'SERVICES', 'CONTACT'];
+
+  // 1. Properly Formatted Time Logic
+  useEffect(() => {
+    const formatTime = () => {
+      const now = new Date();
+      return now.toLocaleTimeString('en-US', {
+        hour: 'numeric',   // Removes leading zero (4:00 instead of 04:00)
+        minute: '2-digit',
+        hour12: true       // Forces 12-hour format (PM/AM)
+      });
+    };
+
+    setTime(formatTime()); // Set initial time immediately
+
+    const timer = setInterval(() => {
+      setTime(formatTime());
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, []);
+
+  // 2. GSAP Infinite Marquee
+  useEffect(() => {
+    const marquee = marqueeRef.current;
+    if (marquee) {
+      const singleWidth = marquee.scrollWidth / 2;
+      gsap.to(marquee, {
+        x: -singleWidth,
+        duration: 20,
+        ease: "none",
+        repeat: -1,
+      });
+    }
+  }, []);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Define items here to easily map delays
-  const navItems = ['ABOUT', 'PROJECTS', 'CONTACT'];
-
   return (
     <>
-      <nav className='fixed top-0 w-full flex justify-between items-center p-6 z-50 text-white'>
-        
-        {/* Brand / Logo */}
-        <div className="font-bold tracking-wider"></div>
+      <nav className='fixed top-0 w-full h-14 md:h-20 py-4 flex justify-between items-center px-4 md:px-10 z-50 backdrop-blur-3xl text-white'>
+        {/* Left Section: Logo, Marquee, Time */}
+        <div className='h-full w-fit flex items-center gap-6'>
+          {/* Brand */}
+          <div className='flex-shrink-0 text-sm md:text-lg lg:text-3xl leading-none md:pb-2'>
+            || ᜑ᜔ᜂᜇᜒᜐ᜔ᜆ᜔ ||
+          </div>
+
+          {/* Marquee Container */}
+          <div className='w-fit h-full hidden min-md:flex items-center rounded-sm bg-blue-900/15'>
+            <div 
+            className='relative overflow-hidden hidden md:block'
+            style={{ 
+              width: '200px', 
+              maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)'
+            }}
+          >
+            <div ref={marqueeRef} className='inline-block whitespace-nowrap'>
+              {[...Array(4)].map((_, i) => (
+                <span key={i} className='text-[14px] lato-regular tracking-[0.1em] px-2 font-light opacity-70'>
+                  Open to opportunities &nbsp;&nbsp;&nbsp;//
+                </span>
+              ))}
+            </div>
+          </div>
+          </div>
+          
+
+          {/* Local Time - Vertically Centered */}
+          <div className='min-md:h-full w-fit max-md:py-1 flex-shrink-0 tabular-nums text-[16px] lg:text-[18px] px-3 rounded-sm bg-blue-900/15 font-lightmedium leading-none flex items-center'>
+            <span className='opacity-70 flex'>{time}</span><Clock className='h-[1em] opacity-70 mt-0 xl:mt-0.5 ml-1'/>
+          </div>
+        </div>
 
         {/* --- MENU TOGGLE BUTTON --- */}
         <button 
           onClick={toggleMenu}
-          className='ml-auto w-fit h-fit grid grid-cols-2 gap-2 group cursor-pointer p-2 relative z-50 bg-black rounded-full'
+          className='ml-auto w-fit h-fit grid grid-cols-2 gap-1 lg:gap-2 group cursor-pointer p-1 lg:p-2 relative z-50 rounded-full'
         >
-          <div className={`w-2 h-2 rounded-full bg-white transition-transform duration-300 ${isOpen ? 'translate-x-[2.5px] translate-y-[2.5px]' : ''}`}></div>
-          <div className={`w-2 h-2 rounded-full bg-white transition-transform duration-300 ${isOpen ? '-translate-x-[2.5px] translate-y-[2.5px]' : ''}`}></div>
-          <div className={`w-2 h-2 rounded-full bg-white transition-transform duration-300 ${isOpen ? 'translate-x-[2.5px] -translate-y-[2.5px]' : ''}`}></div>
-          <div className={`w-2 h-2 rounded-full bg-white transition-transform duration-300 ${isOpen ? '-translate-x-[2.5px] -translate-y-[2.5px]' : ''}`}></div>
+          <div className={`w-1.5 lg:w-2 h-1.5 lg:h-2 rounded-full bg-white transition-all duration-300 ${isOpen ? 'translate-x-[2.5px] translate-y-[2.5px]' : ''}`}></div>
+          <div className={`w-1.5 lg:w-2 h-1.5 lg:h-2 rounded-full bg-white transition-all duration-300 ${isOpen ? '-translate-x-[2.5px] translate-y-[2.5px]' : ''}`}></div>
+          <div className={`w-1.5 lg:w-2 h-1.5 lg:h-2 rounded-full bg-white transition-all duration-300 ${isOpen ? 'translate-x-[2.5px] -translate-y-[2.5px]' : ''}`}></div>
+          <div className={`w-1.5 lg:w-2 h-1.5 lg:h-2 rounded-full bg-white transition-all duration-300 ${isOpen ? '-translate-x-[2.5px] -translate-y-[2.5px]' : ''}`}></div>
         </button>
 
         {/* --- DROPDOWN CONTAINER --- */}
@@ -32,47 +98,32 @@ const Navigation = () => {
           className={`
             bg-white border border-white/20 p-4 z-40
             transition-all duration-300 ease-in-out origin-top-right
-            absolute top-16 right-6 flex
-            flex-col items-end w-auto
-            
+            absolute top-20 right-6 flex
+            flex-col items-end w-auto rounded-md
             ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}
           `} style={{ transitionDelay: isOpen ? '0ms' : '400ms'}}
         >
-
-          {/* --- MAPPED BUTTONS WITH STAGGERED DELAY --- */}
           {navItems.map((item, index) => (
-            <button 
-              key={item} 
-              className='text-white hover:text-gray-400 transition-colors py-4 px-2 overflow-hidden'
-            >
-              {/* Inner container handles the slide movement */}
+            <button key={item} className='text-black text-2xl font-bold py-2 px-2 overflow-hidden'>
               <div 
-                className={`transition-transform duration-500 ease-out will-change-transform
-                  ${isOpen ? 'translate-y-0' : 'translate-y-[-200%]'}
-                `}
-                style={{ 
-                  // 1. Stagger Delay: Multiply index by 100ms (0ms, 100ms, 200ms...)
-                  // 2. Conditional: Only apply delay when opening. When closing, reset instantly for snappier feel.
-                  transitionDelay: isOpen ? `${index * 200}ms` : `${index * 100}ms`
-                }}
+                className={`transition-transform duration-500 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-[-200%]'}`}
+                style={{ transitionDelay: isOpen ? `${index * 150}ms` : `0ms` }}
               >
-                <PixelWord text={item} size={4} color='black'/>
+                {item}
               </div>
             </button>
           ))}
-
         </div>
-
       </nav>
-
-      {isOpen && (
+         {isOpen && (
         <div 
           onClick={() => setIsOpen(false)} 
           className="fixed inset-0 z-30 bg-transparent cursor-default" 
         />
       )}
-    </>
+     <div className='fixed bottom-0 w-full h-30 backdrop-blur-sm [mask-image:linear-gradient(to_top,white_33%,transparent_100%)] z-10'></div>
+    </> 
   )
 }
 
-export default Navigation
+export default Navigation;

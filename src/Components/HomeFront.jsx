@@ -132,7 +132,8 @@ const HomeFront = () => {
 
   return (
     <>
-        <main className='hero-section w-screen lg:h-[120vh] h-screen relative text-white bg-black/95 overflow-hidden'>
+        <main className='hero-section w-screen lg:h-[120vh] h-screen relative text-white bg-blue-900/10 overflow-hidden'>
+            
             <section className='front-background w-full h-screen absolute top-0 bg-transparent'>
                 <Canvas camera={{position: [0, 0, 18], fov: 70, near: 0.1, far: 100}}>
                     
@@ -149,11 +150,11 @@ const HomeFront = () => {
             <div className='w-full h-screen absolute top-0 z-10 pointer-events-none flex justify-center items-center mix-blend-difference'>
                 <h1 
                     ref={isLarge? textRef : null} 
-                    className='main-text font-bold text-center tracking-wide zalando text-green-200 text-6xl'
+                    className='main-text font-bold text-center tracking-wide text-blue-900/80 text-6xl'
                     // Ensure it has block display for transform to work reliably
                     style={{ display: 'block', willChange: 'transform' }}
                 >
-                    <span>ROBOTCO</span>
+                    <span className='merienda-regular tracking-tighter text-shadow-lg text-shadow-white [text-shadow:2px_4px_5px_rgba(0,0,0,0.3)]'>Creative Dev</span>
                 </h1>
             </div>
         </main>

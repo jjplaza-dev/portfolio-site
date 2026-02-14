@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 html {
-    background-color: white;
+    background-color: black;
     overflow-x: hidden;
     color: white;
     height: 1000vh;
@@ -42,6 +42,18 @@ p {
   font-size: var(--p-size);
 }
 
+.merienda-regular {
+  font-family: "Merienda", cursive, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.lato-regular {
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+}
+
 html.lenis, html.lenis body {
   height: auto;
 }
@@ -61,29 +73,6 @@ html.lenis, html.lenis body {
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
-
-
-.zalando{
-  font-family: "Zalando Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 900;
-  font-style: normal;
-  font-variation-settings:
-    "wdth" 100;
-}
-
-.silk-regular {
-  font-family: "Silkscreen", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.silk-bold {
-  font-family: "Silkscreen", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
-
 
 /* body, html, button {
   cursor: none !important;
@@ -106,3 +95,4 @@ html.lenis, html.lenis body {
   background: linear-gradient(to top, #000000 0%, #000000 10%, #11111100 60%);
   @apply w-full h-screen;
 }
+
