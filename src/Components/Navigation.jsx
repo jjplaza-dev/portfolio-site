@@ -45,9 +45,25 @@ const Navigation = () => {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
+    const navRef = useRef(null);
+
+    useEffect(() => {
+      // 2. Set a timeout to run after 1000ms (1 second)
+      const timer = setTimeout(() => {
+        // 3. Access the DOM element directly via .current
+        if (navRef.current) {
+          // Change the style directly
+          navRef.current.style.opacity = '1';
+        }
+      }, 2000);
+
+      // Cleanup the timer if the component unmounts
+      return () => clearTimeout(timer);
+    }, []);
+
   return (
     <>
-      <nav className='fixed top-0 w-full h-14 md:h-20 py-4 flex justify-between items-center px-4 md:px-10 z-50 backdrop-blur-3xl text-white'>
+      <nav ref={navRef} style={{opacity: 0, transition: 'opacity 1s ease-out'}} className='fixed top-0 w-full h-14 md:h-20 py-4 flex justify-between items-center px-4 md:px-10 z-50 backdrop-blur-3xl text-white'>
         {/* Left Section: Logo, Marquee, Time */}
         <div className='h-full w-fit flex items-center gap-6'>
           {/* Brand */}
@@ -56,7 +72,7 @@ const Navigation = () => {
           </div>
 
           {/* Marquee Container */}
-          <div className='w-fit h-full hidden min-md:flex items-center rounded-sm bg-blue-900/15'>
+          <div className='w-fit h-full hidden min-md:flex items-center rounded-sm bg-base-300 brightness-95 text-black/80'>
             <div 
             className='relative overflow-hidden hidden md:block'
             style={{ 
@@ -67,7 +83,7 @@ const Navigation = () => {
           >
             <div ref={marqueeRef} className='inline-block whitespace-nowrap'>
               {[...Array(4)].map((_, i) => (
-                <span key={i} className='text-[14px] lato-regular tracking-[0.1em] px-2 font-light opacity-70'>
+                <span key={i} className='text-[14px] lato font-bold tracking-[0.1em] px-2 opacity-70'>
                   Open to opportunities &nbsp;&nbsp;&nbsp;//
                 </span>
               ))}
@@ -77,8 +93,8 @@ const Navigation = () => {
           
 
           {/* Local Time - Vertically Centered */}
-          <div className='min-md:h-full w-fit max-md:py-1 flex-shrink-0 tabular-nums text-[16px] lg:text-[18px] px-3 rounded-sm bg-blue-900/15 font-lightmedium leading-none flex items-center'>
-            <span className='opacity-70 flex'>{time}</span><Clock className='h-[1em] opacity-70 mt-0 xl:mt-0.5 ml-1'/>
+          <div className='min-md:h-full w-fit max-md:py-1 flex-shrink-0 tabular-nums text-[16px] lg:text-[18px] px-2 lg:px-4 rounded-sm lato bg-base-300 brightness-95 text-black/80 font-medium leading-none flex items-center'>
+            <span className='opacity-70 flex'>{time}</span><Clock className='h-[1em] opacity-70 mt-0 ml-1'/>
           </div>
         </div>
 
@@ -96,7 +112,7 @@ const Navigation = () => {
         {/* --- DROPDOWN CONTAINER --- */}
         <div 
           className={`
-            bg-white border border-white/20 p-4 z-40
+            bg-base-300 brightness-95 p-4 z-40
             transition-all duration-300 ease-in-out origin-top-right
             absolute top-20 right-6 flex
             flex-col items-end w-auto rounded-md
@@ -104,7 +120,7 @@ const Navigation = () => {
           `} style={{ transitionDelay: isOpen ? '0ms' : '400ms'}}
         >
           {navItems.map((item, index) => (
-            <button key={item} className='text-black text-2xl font-bold py-2 px-2 overflow-hidden'>
+            <button key={item} className='text-base-100 text-2xl font-bold py-2 px-2 overflow-hidden'>
               <div 
                 className={`transition-transform duration-500 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-[-200%]'}`}
                 style={{ transitionDelay: isOpen ? `${index * 150}ms` : `0ms` }}
@@ -121,7 +137,7 @@ const Navigation = () => {
           className="fixed inset-0 z-30 bg-transparent cursor-default" 
         />
       )}
-     <div className='fixed bottom-0 w-full h-30 backdrop-blur-sm [mask-image:linear-gradient(to_top,white_33%,transparent_100%)] z-10'></div>
+     {/* <div className='fixed bottom-0 w-full h-30 backdrop-blur-sm [mask-image:linear-gradient(to_top,white_33%,transparent_100%)] z-10'></div> */}
     </> 
   )
 }

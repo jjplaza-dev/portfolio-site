@@ -7,6 +7,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger' // Recommended for syncing
 import * as THREE from 'three'
 import Lenis from 'lenis'
 import ProjectSection from './Components/ProjectSection'
+import Footer from './Components/Footer'
+import AboutMe from './Components/AboutMe'
+import StackSection from './Components/StackSection'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -47,8 +50,11 @@ function App() {
       {/* <LoadingScreen /> */}
       <Navigation />
       <HomeFront />
+      <AboutMe />
       <ProjectSection />
-      <div className='blank-element w-full h-screen'></div>
+      <StackSection />
+      <Footer />
+      
       <CursorDot />
     </>
   )

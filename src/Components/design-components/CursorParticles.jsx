@@ -74,7 +74,7 @@ const Particle = ({ x, y, destX, destY, rotation, onComplete }) => {
 
   return (
     <div
-      className="absolute bg-white w-[2px] h-[2px] rounded-full will-change-transform"
+      className="absolute bg-white w-[2px] h-[2px] rounded-full will-change-transform mix-blend-difference"
       style={{
         left: x,
         top: y,

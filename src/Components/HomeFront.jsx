@@ -1,164 +1,183 @@
-import React, { useMemo, useRef, useEffect } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Instances, Instance } from '@react-three/drei'
-import StudioLights from './three/StudioLights'
-import globalstates from './constants/globalstates';
-import gsap from 'gsap';
-import * as THREE from 'three'
+import React, { useRef, useEffect } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// --- INDIVIDUAL FLOATING CUBE ---
-const FloatingCube = () => {
-  const ref = useRef();
-  
-  const { position, rotationSpeed, randomStartRotation } = useMemo(() => {
-    return {
-      position: [
-        (Math.random() - 0.5) * 25, 
-        (Math.random() - 0.5) * 25, 
-        (Math.random() - 0.5) * 4   
-      ],
-      rotationSpeed: (Math.random() - 0.5) * 0.2,
-      randomStartRotation: [0, Math.random() * Math.PI * 2, 0]
-    };
-  }, []);
-
-  useFrame((state, delta) => {
-    if (ref.current) {
-      ref.current.rotation.y += rotationSpeed * delta;
-    }
-  });
-
-  return <Instance ref={ref} position={position} rotation={randomStartRotation} />;
-};
-
-// --- RANDOMIZED WALL CONTAINER ---
-const RandomizedWall = ({ count = 100, color = '#222222' }) => {
-  return (
-    <Instances range={count}>
-      {/* Fixed: Depth is 1 so cubes look 3D */}
-      <boxGeometry args={[1, 1, 0]} />
-      <meshStandardMaterial color={color} roughness={0.8} metalness={0.8} />
-      
-      {Array.from({ length: count }).map((_, i) => (
-        <FloatingCube key={i} />
-      ))}
-    </Instances>
-  );
-};
-
-// --- ROTATING WRAPPER ---
-const RotatingScene = ({ children }) => {
-  const groupRef = useRef();
-  
-  useFrame((state, delta) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.z += delta * 0.05; 
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.1; 
-    }
-  });
-
-  return <group ref={groupRef}>{children}</group>;
-}
-
-// --- GSAP CAMERA RIG ---
-const CameraRig = ({ mouseX, mouseY }) => {
-  const { camera } = useThree();
-  const isLarge = globalstates((state) => state.isLarge); 
-
-  const xTo = useRef();
-  const yTo = useRef();
-
-  useEffect(() => {
-    xTo.current = gsap.quickTo(camera.position, "x", { duration: 1.5, ease: "power3.out" });
-    yTo.current = gsap.quickTo(camera.position, "y", { duration: 1.5, ease: "power3.out" });
-  }, [camera]);
-
-  useEffect(() => {
-    gsap.to(camera.position, {
-        z: isLarge ? 18 : 25, 
-        duration: 2, 
-        ease: "power2.inOut"
-    });
-  }, [isLarge, camera]);
-
-  useFrame(() => {
-    if (xTo.current && yTo.current) {
-        xTo.current(-mouseX.current * 5); 
-        yTo.current(-mouseY.current * 2);
-    }
-    camera.lookAt(0, 0, 0);
-  });
-  
-  return null;
-}
+gsap.registerPlugin(ScrollTrigger);
 
 const HomeFront = () => {
-  const mouseX = useRef(0);
-  const mouseY = useRef(0);
-  const textRef = useRef(null);
+  const sectionRef = useRef(null);        
+  const scrollWrapperRef = useRef(null);  // Handles Scale & Y (Carries the 3D Camera)
+  const tiltRef = useRef(null);           // Handles Tilt & Opacity fade
   
+  // Refs for high-performance GSAP updates
   const xSet = useRef();
   const ySet = useRef();
+  const rotXSet = useRef();
+  const rotYSet = useRef();
 
   useEffect(() => {
-    // Initialize GSAP setters
-    if (textRef.current) {
-        xSet.current = gsap.quickTo(textRef.current, "x", { duration: 0.8, ease: "power3.out" });
-        ySet.current = gsap.quickTo(textRef.current, "y", { duration: 0.8, ease: "power3.out" });
-    }
+    if (!tiltRef.current || !scrollWrapperRef.current) return;
 
-    // --- MOUSE EVENT HANDLER (Attached to Window for reliability) ---
+    // --- 1. 3D TRACKING SETUP ---
+    // Stronger base tilt (40) for that pronounced bottom-heavy look
+    const BASE_TILT = 30;
+
+    gsap.set(tiltRef.current, { 
+        rotateX: BASE_TILT, 
+        transformOrigin: "center center" 
+    });
+
+    xSet.current = gsap.quickTo(tiltRef.current, "x", { duration: 0.8, ease: "power3.out" });
+    ySet.current = gsap.quickTo(tiltRef.current, "y", { duration: 0.8, ease: "power3.out" });
+    rotXSet.current = gsap.quickTo(tiltRef.current, "rotateX", { duration: 0.8, ease: "power3.out" });
+    rotYSet.current = gsap.quickTo(tiltRef.current, "rotateY", { duration: 0.8, ease: "power3.out" });
+
     const handleMouseMove = (e) => {
         const xNorm = (e.clientX / window.innerWidth) * 2 - 1;
-        const yNorm = -(e.clientY / window.innerHeight) * 2 + 1;
+        const yNorm = (e.clientY / window.innerHeight) * 2 - 1;
         
-        // Update 3D Camera Refs
-        mouseX.current = xNorm;
-        mouseY.current = yNorm;
+        const moveX = xNorm * 30; 
+        const moveY = yNorm * 30; 
+        
+        // Dynamic tilt based on mouse position
+        const rotX = BASE_TILT - (yNorm * 15); 
+        const rotY = xNorm * 10; 
 
-        // Update Text GSAP
-        // Increased multiplier from 25 to 100 for visible movement
-        if (xSet.current && ySet.current) {
-            xSet.current(xNorm * 100); 
-            ySet.current(-yNorm * 100); 
-        }
+        xSet.current(moveX);
+        ySet.current(moveY);
+        rotXSet.current(rotX);
+        rotYSet.current(rotY);
+    };
+
+    const handleMouseLeave = () => {
+        xSet.current(0);
+        ySet.current(0);
+        rotXSet.current(BASE_TILT); 
+        rotYSet.current(0);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []); // Run once on mount
+    document.addEventListener('mouseleave', handleMouseLeave);
 
-  const isLarge = globalstates.getState().isLarge;
+    // --- 2. TRACING TEXT ANIMATION ---
+    const textTl = gsap.timeline();
+    
+    textTl.fromTo('.trace-text', 
+        { 
+            strokeDasharray: 2000, 
+            strokeDashoffset: 2000, 
+            fill: 'rgba(255, 255, 255, 0)' 
+        },
+        { 
+            strokeDashoffset: 0, 
+            duration: 3, 
+            ease: "power2.inOut",
+        }
+    ).to('.trace-text', {
+        fill: 'rgba(255, 255, 255, 1)', 
+        duration: 0.5,
+        ease: "power1.out"
+    }, "-=0.5"); 
+
+    // --- 3. SCROLL AWAY EFFECT ---
+    // We use a timeline so we can animate the wrapper (scale/y) and the tiltRef (opacity) simultaneously
+    const scrollTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "center top",
+            scrub: 1, 
+        }
+    });
+
+    // Animate the Camera Wrapper (Scale + Move Up)
+    scrollTl.to(scrollWrapperRef.current, {
+        y: "-30vh", 
+        scale: 0.4, 
+        ease: "power1.out",
+    }, 0)
+    // Animate the Opacity on the inner container to prevent CSS 3D flattening
+    .to(tiltRef.current, {
+        opacity: 0,
+        ease: "power1.out"
+    }, 0);
+
+    return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseleave', handleMouseLeave);
+        textTl.kill(); 
+        if (scrollTl.scrollTrigger) scrollTl.scrollTrigger.kill();
+    };
+  }, []);
 
   return (
-    <>
-        <main className='hero-section w-screen lg:h-[120vh] h-screen relative text-white bg-blue-900/10 overflow-hidden'>
-            
-            <section className='front-background w-full h-screen absolute top-0 bg-transparent'>
-                <Canvas camera={{position: [0, 0, 18], fov: 70, near: 0.1, far: 100}}>
-                    
-                    <CameraRig mouseX={mouseX} mouseY={mouseY} />
-                    <StudioLights />
-                    
-                    <RotatingScene>
-                        <RandomizedWall count={100} />
-                    </RotatingScene>
+    <section ref={sectionRef} className='w-screen h-screen bg-base-300 text-white overflow-hidden flex items-center justify-center'>
+        {/* Outside the change your perspective text */}
 
-                </Canvas>
-            </section>
 
-            <div className='w-full h-screen absolute top-0 z-10 pointer-events-none flex justify-center items-center mix-blend-difference'>
-                <h1 
-                    ref={isLarge? textRef : null} 
-                    className='main-text font-bold text-center tracking-wide text-blue-900/80 text-6xl'
-                    // Ensure it has block display for transform to work reliably
-                    style={{ display: 'block', willChange: 'transform' }}
-                >
-                    <span className='merienda-regular tracking-tighter text-shadow-lg text-shadow-white [text-shadow:2px_4px_5px_rgba(0,0,0,0.3)]'>Creative Dev</span>
-                </h1>
+        <div ref={scrollWrapperRef} className="w-full h-full flex items-center justify-center will-change-transform" style={{ perspective: '600px' }} >
+            {/* TILT CONTAINER - along with change your perspective text*/}
+
+
+            <div 
+                ref={tiltRef}
+                className='w-full h-full flex flex-col justify-center items-center transform-gpu will-change-transform'
+                style={{ transformStyle: 'preserve-3d' }}
+            >
+                {/* --- LINE 1: CHANGE YOUR --- */}
+                <div className="relative w-fit flex justify-center items-center">
+                    <div 
+                        className='opacity-0 select-none font-[family-name:var(--font-scriptoria)] leading-none text-center' 
+                        style={{ fontSize: 'clamp(2rem, 10vw + 2rem, 20rem)' }}
+                    >
+                        CHANGE YOUR
+                    </div>
+
+                    <svg className="absolute inset-0 w-full h-full overflow-visible pointer-events-none">
+                        <text 
+                            x="50%" 
+                            y="50%" 
+                            textAnchor="middle" 
+                            dominantBaseline="middle" 
+                            className="trace-text font-[family-name:var(--font-scriptoria)]"
+                            style={{ fontSize: 'clamp(2rem, 10vw + 2rem, 20rem)' }}
+                            stroke="white"
+                            strokeWidth="2px"
+                        >
+                            CHANGE YOUR
+                        </text>
+                    </svg>
+                </div>
+
+                {/* --- LINE 2: PERSPECTIVE --- */}
+                <div className="relative w-fit flex justify-center items-center">
+                    <div 
+                        className='opacity-0 select-none font-[family-name:var(--font-scriptoria)] leading-none text-center' 
+                        style={{ fontSize: 'clamp(2rem, 10vw + 2rem, 20rem)' }}
+                    >
+                        PERSPECTIVE
+                    </div>
+
+                    <svg className="absolute inset-0 w-full h-full overflow-visible pointer-events-none">
+                        <text 
+                            x="50%" 
+                            y="50%" 
+                            textAnchor="middle" 
+                            dominantBaseline="middle" 
+                            className="trace-text font-[family-name:var(--font-scriptoria)]"
+                            style={{ fontSize: 'clamp(2rem, 10vw + 2rem, 20rem)' }}
+                            stroke="white"
+                            strokeWidth="2px"
+                        >
+                            PERSPECTIVE
+                        </text>
+                    </svg>
+                </div>
+                
             </div>
-        </main>
-    </>
+        </div>
+        
+    </section>
   )
 }
 

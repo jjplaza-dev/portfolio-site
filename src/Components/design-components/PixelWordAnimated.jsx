@@ -120,7 +120,7 @@ const PixelUnit = ({ pixel, size}) => {
   return (
     <div
       style={style}
-      className={`${pixel === '1' ? 'bg-white will-change-transform' : 'bg-transparent'}`}
+      className={`${pixel === '1' ? 'bg-black will-change-transform' : 'bg-transparent'}`}
     />
   );
 };

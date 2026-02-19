@@ -1,22 +1,18 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 
 // --- Sub-component: Individual Particle ---
-// Renders a single square that explodes and fades out
 const Particle = ({ x, y, destX, destY, rotation, onComplete }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Trigger animation frame to ensure transition happens
     requestAnimationFrame(() => setMounted(true));
-
-    // Cleanup after 1 second (faster fade for snappier feel)
     const timer = setTimeout(onComplete, 1000);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
   return (
     <div
-      className="absolute bg-white w-[4px] h-[4px] pointer-events-none will-change-transform mix-blend-difference"
+      className="absolute bg-white w-[4px] h-[4px] pointer-events-none will-change-transform mix-blend-difference rounded-full"
       style={{
         left: x,
         top: y,
@@ -34,14 +30,11 @@ const Particle = ({ x, y, destX, destY, rotation, onComplete }) => {
 const CursorDot = () => {
   const dotRef = useRef(null);
   
-  // 1. Particle State
   const [particles, setParticles] = useState([]);
 
-  // 2. Cursor Core Refs
-  const cursor = useRef({ x: 0, y: 0, width: 20, height: 20, rotation: 0 });
-  const target = useRef({ x: 0, y: 0, width: 20, height: 20, isSnapped: false });
+  const cursor = useRef({ x: 0, y: 0, width: 20, height: 20 });
+  const target = useRef({ x: 0, y: 0, width: 20, height: 20 });
 
-  // Helper to remove particles
   const removeParticle = useCallback((id) => {
     setParticles(prev => prev.filter(p => p.id !== id));
   }, []);
@@ -51,38 +44,42 @@ const CursorDot = () => {
     const onMouseMove = (e) => {
       const button = e.target.closest('button') || e.target.closest('a') || e.target.closest('[role="button"]');
 
+      target.current.x = e.clientX;
+      target.current.y = e.clientY;
+
       if (button) {
-        const rect = button.getBoundingClientRect();
-        target.current.x = rect.left + rect.width / 2;
-        target.current.y = rect.top + rect.height / 2;
-        target.current.width = rect.width;
-        target.current.height = rect.height;
-        target.current.isSnapped = true;
+        // Hover State: Enlarge and make hollow
+        target.current.width = 40;  
+        target.current.height = 40; 
+        
+        if (dotRef.current) {
+            dotRef.current.classList.add('bg-transparent');
+            dotRef.current.classList.remove('bg-white'); // Assuming white is your solid color
+        }
       } else {
-        target.current.x = e.clientX;
-        target.current.y = e.clientY;
+        // Normal State: Base size and solid center
         target.current.width = 20;
         target.current.height = 20;
-        target.current.isSnapped = false;
+        
+        if (dotRef.current) {
+            dotRef.current.classList.add('bg-white');
+            dotRef.current.classList.remove('bg-transparent');
+        }
       }
     };
 
-    // --- NEW: Click Listener for Particles ---
+    // --- Click Listener for Particles ---
     const onMouseDown = (e) => {
-       // Only trigger on Left Click
        if (e.button !== 0) return;
 
        const newParticles = [];
-       const count = Math.floor(Math.random() * 3) + 4; // Spawn 4-6 particles
+       const count = Math.floor(Math.random() * 3) + 4; 
 
        for (let i = 0; i < count; i++) {
-         // Explode outwards from the CURRENT cursor position
-         // We use cursor.current.x/y to spawn from where the cursor *is*, not just where the mouse clicked
          newParticles.push({
            id: Date.now() + i + Math.random(),
            x: cursor.current.x,
            y: cursor.current.y,
-           // Random spread -100px to 100px
            destX: (Math.random() - 0.5) * 150, 
            destY: (Math.random() - 0.5) * 150,
            rotation: (Math.random() - 0.5) * 720
@@ -97,22 +94,12 @@ const CursorDot = () => {
       const dx = target.current.x - cursor.current.x;
       const dy = target.current.y - cursor.current.y;
       
-      const ease = 0.1;
+      const ease = 0.15; 
+      
       cursor.current.x += dx * ease;
       cursor.current.y += dy * ease;
       cursor.current.width += (target.current.width - cursor.current.width) * ease;
       cursor.current.height += (target.current.height - cursor.current.height) * ease;
-
-      let targetRotation = 0;
-      if (!target.current.isSnapped) {
-        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
-           targetRotation = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
-        } else {
-           targetRotation = cursor.current.rotation; 
-        }
-      } 
-      
-      cursor.current.rotation += (targetRotation - cursor.current.rotation) * ease;
 
       if (dotRef.current) {
         dotRef.current.style.width = `${cursor.current.width}px`;
@@ -120,7 +107,6 @@ const CursorDot = () => {
         dotRef.current.style.transform = `
             translate3d(${cursor.current.x}px, ${cursor.current.y}px, 0) 
             translate(-50%, -50%) 
-            rotate(${cursor.current.rotation}deg)
         `;
       }
       rafId = requestAnimationFrame(animate);
@@ -128,18 +114,17 @@ const CursorDot = () => {
 
     rafId = requestAnimationFrame(animate);
     window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mousedown', onMouseDown); // Add Click Listener
+    window.addEventListener('mousedown', onMouseDown);
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mousedown', onMouseDown); // Cleanup
+      window.removeEventListener('mousedown', onMouseDown);
       cancelAnimationFrame(rafId);
     };
   }, []);
 
   return (
     <>
-      {/* 1. The Particle Layer (Z-Index matches Cursor) */}
       <div className="fixed inset-0 pointer-events-none z-[9999] overflow-hidden">
         {particles.map(p => (
           <Particle 
@@ -150,11 +135,10 @@ const CursorDot = () => {
         ))}
       </div>
 
-      {/* 2. The Main Cursor Dot */}
       <div 
         ref={dotRef} 
-        style={{clipPath: "polygon(100% 10%, 90% 0%, 10% 0%, 0% 10%, 0% 90%, 10% 100%, 90% 100%, 100% 90%)"}} 
-        className="fixed top-0 left-0 bg-white pointer-events-none z-[9999] mix-blend-difference"
+        // Added: border-2, border-white, bg-white, and a smooth transition-colors
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] border-5 border-white bg-white transition-colors duration-200 ease-out"
       ></div>
     </>
   )
