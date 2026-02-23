@@ -137,7 +137,6 @@ const CursorDot = () => {
 
       <div 
         ref={dotRef} 
-        // Added: border-2, border-white, bg-white, and a smooth transition-colors
         className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] border-5 border-white bg-white transition-colors duration-200 ease-out"
       ></div>
     </>

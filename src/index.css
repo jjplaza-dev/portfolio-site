@@ -4,7 +4,6 @@
 html {
     background-color: oklch(67.892% 0.11152 63.492);
     overflow-x: hidden;
-    color: white;
     height: 1000vh;
 }
 

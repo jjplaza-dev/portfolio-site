@@ -24,7 +24,7 @@ const PortraitAnimation = () => {
         },
         { 
             strokeDashoffset: 0, 
-            duration: 5, 
+            duration: 2, 
             ease: "power2.inOut",
             scrollTrigger: {
                 trigger: svgRef.current,
