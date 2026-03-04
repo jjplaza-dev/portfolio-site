@@ -1,101 +1,101 @@
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import React, { useEffect, useRef } from 'react'
+import gsap from 'gsap'
 
 const FooterSection = () => {
-  const footerRef = useRef(null);
-  const shapeRef = useRef(null);
-  const textRef = useRef(null);
+  const containerRef = useRef(null);
+  const cloudImages = [
+    'src/assets/images/cloud1.png',
+    'src/assets/images/cloud2.png',
+    'src/assets/images/cloud3.png',
+    'src/assets/images/cloud4.png',
+    'src/assets/images/cloud5.png'
+  ];
 
   useEffect(() => {
-    let ctx = gsap.context(() => {
-      // Configuration for the "Tail" delay
-      const smoothDelay = 1.5; // Higher = more "liquid" delay/tail effect
+    // 8 Lanes from top (0%) to bottom (~90%)
+    const lanes = [5, 15, 25, 40, 55, 70, 85, 95];
 
-      gsap.fromTo(shapeRef.current,
-        {
-          clipPath: "ellipse(120% 0% at 50% 100%)", 
-        },
-        {
-          clipPath: "ellipse(160% 100% at 50% 100%)",
-          ease: "none", // Scrub handles the easing/smoothing
-          scrollTrigger: {
-            trigger: footerRef.current,
-            // Desktop starts later, Mobile starts at 30% from bottom (70% viewport)
-            start: "top 85%", 
-            end: "bottom bottom",
-            scrub: smoothDelay, // This creates the "duration" and "delay" you requested
-            invalidateOnRefresh: true,
-          }
-        }
-      );
+    const spawnCloud = () => {
+      if (!containerRef.current) return;
 
-      // Text animation with a slightly different delay for a parallax effect
-      gsap.fromTo(textRef.current,
-        { 
-            y: 150, 
-            opacity: 0,
-            skewY: 7 // Adds a sophisticated "unfolding" look
-        },
-        {
-          y: 0,
-          opacity: 1,
-          skewY: 0,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: footerRef.current,
-            start: "top 80%",
-            end: "bottom 90%",
-            scrub: 2, // Slower than the shape for a sense of depth
-          }
-        }
-      );
-    }, footerRef);
+      const cloud = document.createElement('img');
+      const randomImg = cloudImages[Math.floor(Math.random() * cloudImages.length)];
+      
+      // Select a random lane index (0 to 7)
+      const laneIndex = Math.floor(Math.random() * lanes.length);
+      const laneY = lanes[laneIndex];
 
-    return () => ctx.revert();
+      /* PERSPECTIVE LOGIC:
+         As laneIndex increases (moves down the screen):
+         - Scale increases (0.3 to 1.5)
+         - Duration decreases/Speed increases (60s down to 15s)
+         - Z-index increases (1 to 8)
+         - Opacity increases (0.3 to 0.9)
+      */
+      const scale = gsap.utils.mapRange(0, 7, 0.3, 1.6, laneIndex);
+      const duration = gsap.utils.mapRange(0, 7, 60, 15, laneIndex);
+      const zIndex = laneIndex + 1; // Lanes 1-8
+      const opacity = gsap.utils.mapRange(0, 7, 0.8, 1, laneIndex);
+      const blur = gsap.utils.mapRange(0, 7, 4, 0, laneIndex); // Far clouds are blurrier
+
+      cloud.src = randomImg;
+      // We use inline styles for the dynamic zIndex and filter
+      cloud.className = 'absolute pointer-events-none select-none';
+      cloud.style.zIndex = zIndex;
+      cloud.style.filter = `blur(${blur}px)`;
+      
+      gsap.set(cloud, {
+        top: `${laneY}%`,
+        left: '100%',
+        scale: scale,
+        opacity: 0,
+      });
+
+      containerRef.current.appendChild(cloud);
+
+      const tl = gsap.timeline({
+        onComplete: () => cloud.remove()
+      });
+
+      tl.to(cloud, {
+        opacity: opacity,
+        duration: 2,
+      }, 0)
+      .to(cloud, {
+        x: `-${window.innerWidth + (800 * scale)}px`, 
+        duration: duration,
+        ease: "none"
+      }, 0);
+    };
+
+    const timer = setInterval(spawnCloud, 2000);
+    for(let i = 0; i < 5; i++) spawnCloud(); // Initial fill
+
+    return () => clearInterval(timer);
   }, []);
 
   return (
-    <footer 
-      ref={footerRef} 
-      className="relative w-full h-[70vh] md:h-[90vh] bg-transparent overflow-hidden"
+    <section 
+      ref={containerRef} 
+      className='w-full h-screen relative flex justify-center items-center overflow-hidden bg-[oklch(97.466%_0.011_259.822)]'
     >
-      <div
-        ref={shapeRef}
-        className="absolute bottom-0 left-0 w-full h-full bg-black flex flex-col items-center justify-center"
-        style={{ clipPath: 'ellipse(120% 0% at 50% 100%)' }}
-      >
-        <div className="text-center px-4">
-          <h1 
-            ref={textRef} 
-            className="text-[15vw] leading-none font-bold text-white uppercase tracking-tighter"
-          >
-            Let's Talk
-          </h1>
-          
-          <div className="mt-12 flex flex-wrap justify-center gap-6 md:gap-12">
-            {['Instagram', 'LinkedIn', 'Dribbble', 'Twitter'].map((link) => (
-              <a 
-                key={link}
-                href={`#${link}`}
-                className="text-sm md:text-lg text-gray-400 hover:text-white transition-colors duration-300"
-              >
-                {link}
-              </a>
-            ))}
-          </div>
+      {/* FOOTER TEXT ELEMENT 
+          z-index is 10 to ensure it stays above most clouds, 
+          but you can set it to 5 if you want the bottom-lane clouds 
+          to pass IN FRONT of the text.
+      */}
+      <div className='footer-text w-[50%] min-w-[300px] h-fit z-[10] relative pointer-events-auto'>
+        <div className='text-center fredoka font-semibold text-[clamp(2rem,5vw,25rem)] leading-8 md:leading-15 2xl:leading-[7.5rem]'>
+          FEEL LIKE
         </div>
-
-        {/* Branding/Copyright at bottom */}
-        <div className="absolute bottom-10 w-full px-10 flex justify-between items-center text-[10px] uppercase tracking-widest text-gray-500">
-          <p>© 2026 YOUR PORTFOLIO</p>
-          <p>BUILT WITH REACT & GSAP</p>
+        <div className='text-center fredoka font-semibold text-[clamp(2rem,5vw,25rem)] leading-8 md:leading-15 2xl:leading-[5rem]'>
+          COLLABORATING ?
         </div>
+        <p className='text-center font-medium scale-80 mt-10'>CONTACT ME</p>
+        <h2 className='text-center courgette my-2 text-primary'>jjplaza.dev@gmail.com</h2>
       </div>
-    </footer>
-  );
+    </section>
+  )
 }
 
 export default FooterSection;

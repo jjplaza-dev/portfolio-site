@@ -17,12 +17,12 @@ useEffect(() => {
   return (
     <div>
         <HeroSection />
-        <AboutSection />
         <ProjectSection />
         <ServicesSection />
+        <AboutSection />
         <TechStackSection />
         <CTASection />
-    </div>
+    </div>                        
   )
 }
 

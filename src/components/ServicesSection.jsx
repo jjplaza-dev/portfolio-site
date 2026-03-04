@@ -15,8 +15,9 @@ const ServicesSection = () => {
   ];
 
   return (
-    <section className='w-full h-fit flex flex-col border border-black/10'>
-      <h2 className='w-full lg:w-[80%] mx-auto p-5 mt-10 text-xl md:text-3xl font-light'>
+    <section className='w-screen h-full flex flex-col px-[6vw] py-[6vh]'>
+      <div className='w-full h-full rounded-2xl p-2 shadow-2xl'>
+        <h2 className='w-full lg:w-[80%] mx-auto p-5 mt-10 text-xl md:text-3xl font-light'>
         Digital environments engineered to feel as fluid as they are functional—igniting the user journey
       </h2>
       
@@ -30,6 +31,7 @@ const ServicesSection = () => {
             setActiveIndex={setActiveIndex}
           />
         ))}
+      </div>
       </div>
     </section>
   );
