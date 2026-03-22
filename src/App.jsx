@@ -13,13 +13,13 @@ const App = () => {
   const location = useLocation();
 
   return (
-    <div className="bg-[oklch(97.466%_0.011_259.822)] min-h-screen selection:bg-primary selection:text-white">
+    <div className=" min-h-screen bg-primary">
       <Navigation />
       <CustomCursor />
 
-      <main className="relative z-10">
+      <main className="relative z-10 bg-inherit">
         <Routes location={location} key={location.pathname}>
-          <Route path="home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="works" element={<Works />} />
         </Routes>
       </main>

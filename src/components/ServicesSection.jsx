@@ -1,37 +1,46 @@
 import React, { useState } from 'react';
-import ServiceCard from './ServiceCard'; // We will create this below
+import ServiceCard from './ServiceCard';
 
 const ServicesSection = () => {
-  // State to track which button is clicked on mobile (Radio behavior)
   const [activeIndex, setActiveIndex] = useState(null);
 
   const services = [
-    "Website Design",
-    "Full-Stack Development",
-    "Responsive Designs",
-    "Web Development",
-    "Micro Interactions",
-    "SEO Strategy"
-  ];
+    {"title":"Web Dev",
+      "desc":"Scalable architecture without the bloat. Built for speed, accessibility, and the long game."
+    },
+    {"title":"Web Design",
+      "desc":"Structure before style. Interfaces that prioritize hierarchy and interaction over empty decoration."
+    },
+    {
+      "title":"Redesign",
+      "desc":"Evolution, not just a facelift. Sharpening your visual identity while boosting core performance."
+    },
+    {
+      "title":"Custom Code",
+      "desc":"Solving the edge cases. Bespoke logic and backend tools for problems off-the-shelf plugins can't handle."
+    }
+  ]
+  
 
   return (
-    <section className='w-screen h-full flex flex-col px-[6vw] py-[6vh]'>
-      <div className='w-full h-full rounded-2xl p-2 shadow-2xl'>
-        <h2 className='w-full lg:w-[80%] mx-auto p-5 mt-10 text-xl md:text-3xl font-light'>
-        Digital environments engineered to feel as fluid as they are functional—igniting the user journey
-      </h2>
-      
-      <div className='w-full h-fit py-10 px-[5vw] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1'>
-        {services.map((title, index) => (
-          <ServiceCard 
-            key={index} 
-            index={index}
-            title={title} 
-            activeIndex={activeIndex}
-            setActiveIndex={setActiveIndex}
-          />
-        ))}
+    <section className='w-screen h-full flex flex-col justify-center border-t border-b border-black/20 bg-inherit'>
+      <div className='w-full h-full rounded-2xl'>
+        <div className='section-title w-full flex'><p>SERVICES</p>
       </div>
+        
+      
+        <div className='inner-section w-full grid grid-cols-1 border-l border-black/10'>
+          {services.map((title, index) => (
+            <ServiceCard 
+              key={index} 
+              index={index}
+              title={title.title} 
+              desc={title.desc}
+              activeIndex={activeIndex}
+              setActiveIndex={setActiveIndex}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

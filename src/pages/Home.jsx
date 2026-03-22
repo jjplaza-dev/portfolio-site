@@ -7,6 +7,7 @@ import ProjectSection from '../Components/ProjectSection'
 import CTASection from '../Components/CTASection'
 import TechStackSection from '../components/TechStackSection'
 import ServicesSection from '../components/ServicesSection';
+import Expertise from '../components/Expertise';
 
 gsap.registerPlugin(ScrollToPlugin);
 const Home = () => {
@@ -15,12 +16,13 @@ useEffect(() => {
 }, []);
 
   return (
-    <div>
+    <div className='bg-inherit'>
         <HeroSection />
         <ProjectSection />
+        <Expertise />
         <ServicesSection />
-        <AboutSection />
         <TechStackSection />
+        {/* <AboutSection /> */}
         <CTASection />
     </div>                        
   )
