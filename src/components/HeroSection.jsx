@@ -2,11 +2,15 @@ import gsap from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { useGSAP } from '@gsap/react';
 import { useRef } from 'react';
+import { ArrowDown } from 'lucide-react';
 
 gsap.registerPlugin(Draggable);
 
 const HeroSection = () => {
-  const sectionRef = useRef(null)
+  const sectionRef = useRef(null);
+  const arrowDown = useRef(null);
+
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth > 768;
 
   useGSAP(() => {
     const dragTargets = gsap.utils.toArray('.drag-item');
@@ -25,6 +29,16 @@ const HeroSection = () => {
         },
       });
     });
+
+    // Arrow bounce animation (Infinite loop)
+    gsap.to(arrowDown.current, {
+      y: 0,
+      duration: 1,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.inOut"
+    });
+
   }, { scope: sectionRef });
 
   const myText = "I am this I am that, chuchu Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet, minus nisi veniam iusto nulla."
@@ -56,6 +70,12 @@ const HeroSection = () => {
               <div className={`w-fit h-fit px-2 box-border border border-transparent hover:border-accent group ${dragClass}`}><FourCorners/>PLAZA</div>
               </div>
             <div className={`w-[80%] text-center mt-5 md:hidden h-fit flex items-center mx-auto border border-transparent hover:border-accent p-1 text-md tracking-normal leading-5 ${dragClass}`}>{myText}</div>
+            <div className={`absolute bottom-[10%] left-[50%] translate-x-[-50%] w-fit h-fit flex flex-col items-center py-4 px-2 group ${isDesktop ? 'drag-item border border-transparent hover:border-accent' : ''}`}>
+              <FourCorners />
+              <a href="#projects-section" className=' px-4 py-2 rounded-full text-primary bg-secondary cursor-pointer'>Go to my Projects</a>
+              <div className='text-[12px] mt-2 h-fit opacity-80'>scroll down</div>
+              <div ref={arrowDown} className='scale-60 opacity-80 translate-y-[-25%]'><ArrowDown /></div>
+            </div>
           </div>
         </div>
       </div>
@@ -65,11 +85,10 @@ const HeroSection = () => {
 
 const FourCorners = () => {
   return <>
-    {/* Four Corners */}
-                  <div className="absolute -top-[4px] -left-[4px] w-2 h-2 bg-accent outline outline-3 outline-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute -top-[4px] -right-[4px] w-2 h-2 bg-accent outline outline-3 outline-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute -bottom-[4px] -left-[4px] w-2 h-2 bg-accent outline outline-3 outline-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute -bottom-[4px] -right-[4px] w-2 h-2 bg-accent outline outline-3 outline-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="absolute -top-[4px] -left-[4px] w-2 h-2 bg-accent outline outline-3 outline-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="absolute -top-[4px] -right-[4px] w-2 h-2 bg-accent outline outline-3 outline-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="absolute -bottom-[4px] -left-[4px] w-2 h-2 bg-accent outline outline-3 outline-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="absolute -bottom-[4px] -right-[4px] w-2 h-2 bg-accent outline outline-3 outline-primary opacity-0 group-hover:opacity-100 transition-opacity" />
 
   </>
 }

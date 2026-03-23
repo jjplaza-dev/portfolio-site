@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import HeroSection from '../Components/HeroSection'
-import AboutSection from '../Components/AboutSection'
 import ProjectSection from '../Components/ProjectSection'
 import CTASection from '../Components/CTASection'
 import TechStackSection from '../components/TechStackSection'
@@ -18,11 +17,10 @@ useEffect(() => {
   return (
     <div className='bg-inherit'>
         <HeroSection />
-        <ProjectSection />
         <Expertise />
         <ServicesSection />
         <TechStackSection />
-        {/* <AboutSection /> */}
+        <ProjectSection />
         <CTASection />
     </div>                        
   )

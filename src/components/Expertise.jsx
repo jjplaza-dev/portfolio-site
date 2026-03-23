@@ -3,6 +3,11 @@ import gsap from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import { useGSAP } from '@gsap/react';
 
+import motionImg from '../assets/images/Motion_Orchestration.png'
+import interactionImg from '../assets/images/Interaction_Engineering.png'
+import workflowsImg from '../assets/images/AI_Workflows.png'
+import vibeImg from '../assets/images/Vibe_Coding.png'
+
 gsap.registerPlugin(Draggable);
 
 const Expertise = () => {
@@ -13,22 +18,22 @@ const Expertise = () => {
     {
       "title": "Motion Orchestration",
       "desc": "I transform static layouts into cinematic, scroll-driven narratives where every movement serves a clear purpose.",
-      "image": ""
+      "image": motionImg
     },
     {
       "title": "Interaction Engineering",
       "desc": "I craft tactile, high-fidelity interfaces that prioritize the feel of every click, hover, and micro-interaction.",
-      "image": ""
+      "image": interactionImg
     },
     {
       "title": "AI Workflows",
       "desc": "I integrate advanced generative tools into my development process to solve complex logic and ship features at high speed.",
-      "image": ""
+      "image": workflowsImg
     },
     {
       "title": "Vibe Coding",
       "desc": "I lean into rapid, intuition-led iteration to bridge the gap between abstract ideas and functional, live prototypes.",
-      "image": ""
+      "image": vibeImg
     }
   ]
 
@@ -70,8 +75,8 @@ const Expertise = () => {
                   <div className="absolute -bottom-[4px] -left-[4px] w-2 h-2 bg-accent outline outline-3 outline-primary opacity-20 group-hover:opacity-100 transition-opacity" />
                   <div className="absolute -bottom-[4px] -right-[4px] w-2 h-2 bg-accent outline outline-3 outline-primary opacity-20 group-hover:opacity-100 transition-opacity" />
 
-                <div className='w-24 aspect-square border pointer-events-none flex items-center justify-center text-[10px] uppercase tracking-widest text-black/30'>
-                  Logo
+                <div className='w-12 lg:w-16 opacity-80'>
+                  <img src={item.image}/>
                 </div>
                 <div className='text-[14px] font-bold pointer-events-none'>{item.title}</div>
                 <div className='w-[90%] text-black/70 text-[12px] text-center leading-4 pointer-events-none'>

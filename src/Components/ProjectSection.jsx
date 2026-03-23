@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ArrowUpRight, X } from 'lucide-react';
+import { ArrowUpRight, MoveRight, X } from 'lucide-react';
 
 import hablonneVideo from '../assets/vidoes/Hablonne(edit 1).mp4'
 import cooklookVideo from '../assets/vidoes/cooklook.mp4'
@@ -10,11 +10,16 @@ import cooklookVideo from '../assets/vidoes/cooklook.mp4'
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
-  { id: '001', title: 'Philaya', tech: 'REACT + SUPABASE', details: 'A high-frequency trading dashboard featuring real-time data visualization via WebSockets and D3.js. Designed for low-latency state updates.', video: 'https://cdn.coverr.co/videos/coverr-typing-on-a-mechanical-keyboard-3-5244/1080p.mp4' },
-  { id: '002', title: 'Hablonne', tech: 'NEXT.JS + GSAP', details: 'Automated CI/CD deployment interface. Utilizes complex GSAP timelines to visualize server build states and deployment nodes.', video: hablonneVideo },
-  { id: '003', title: 'Prevhues', tech: 'MONGODB + NODE', details: 'Scalable NoSQL cluster management UI. Features an interactive node-graph editor to route database shards dynamically.', video: 'https://cdn.coverr.co/videos/coverr-lines-of-code-on-a-screen-2178/1080p.mp4' },
-  { id: '004', title: 'Surveyour', tech: 'THREE.JS + WEBGL', details: 'In-browser 3D simulation engine for aerodynamic testing. Built entirely with raw WebGL shaders and Three.js math utilities.', video: 'https://cdn.coverr.co/videos/coverr-abstract-neon-lines-4156/1080p.mp4' },
-  { id: '005', title: 'CookLook', tech: 'VUE + WEBSOCKETS', details: 'Medical-grade telemetry dashboard. Prioritizes accessibility and instantaneous data reflection for critical hardware monitoring.', video: cooklookVideo},
+  { id: '001', title: 'Philaya', tech: 'REACT + SUPABASE', 
+      details: 'Philaya is a dynamic news and media platform built to merge real-time reporting with modern web interactivity. Unlike static news portals, Philaya delivers a seamless experience through React-driven interfaces and GSAP-enhanced animations that make stories feel alive. Powered by Supabase for structured content management and deployed globally via Vercel with Hostinger domain integration, the system ensures fast delivery, scalability, and responsive design. By combining cutting-edge technology with curated journalism, Philaya positions itself as a forward-looking hub for geopolitics, science, and business.', video: 'https://cdn.coverr.co/videos/coverr-typing-on-a-mechanical-keyboard-3-5244/1080p.mp4' },
+  { id: '002', title: 'Hablonne', tech: 'NEXT.JS + GSAP', 
+      details: 'Hablonne is a modern heritage-driven fashion platform that fuses cultural craftsmanship with cutting-edge web technology. Unlike static e‑commerce templates, Hablonne delivers an immersive shopping experience through React-powered interfaces and GSAP animations that bring collections to life. Backed by Supabase for real-time data and deployed seamlessly on Vercel with Hostinger domain integration, the system ensures scalability, responsiveness, and global reach. By weaving tradition into a dynamic digital framework, Hablonne positions itself as both a cultural showcase and a sustainable lifestyle brand.', video: hablonneVideo },
+  { id: '003', title: 'Prevhues', tech: 'MONGODB + NODE', 
+      details: 'Prevhues is a dynamic design-engine and community library built to bridge the gap between color theory and real-time implementation. Unlike static palette generators, Prevhues allows users to "live-test" colors across the entire application interface instantly.', video: 'https://cdn.coverr.co/videos/coverr-lines-of-code-on-a-screen-2178/1080p.mp4' },
+  { id: '004', title: 'Surveyour', tech: 'THREE.JS + WEBGL',
+      details: 'Surveyour is a streamlined survey and polling platform designed to simplify data collection with a focus on user experience and visual impact. The application allows users to create, distribute, and track surveys in real-time', video: 'https://cdn.coverr.co/videos/coverr-abstract-neon-lines-4156/1080p.mp4' },
+  { id: '005', title: 'CookLook', tech: 'VUE + WEBSOCKETS', 
+      details: 'CookLook is a modern web application designed to bridge the gap between a cluttered pantry and a home-cooked meal. By focusing on "ingredient-first" discovery, the system allows users to input their available supplies and instantly receive curated recipe recommendations, effectively reducing food waste and decision fatigue.', video: cooklookVideo},
 ];
 
 const ProjectItem = ({ project, onClick }) => {
@@ -33,7 +38,7 @@ const ProjectItem = ({ project, onClick }) => {
     let mm = gsap.matchMedia();
 
     // --- DESKTOP BEHAVIOR (Hover & Track) ---
-    mm.add("(min-width: 768px)", () => {
+    mm.add("(min-width: 769px)", () => {
       // 1. Mouse X/Y Tracking Logic
       const mediaMover = (e) => {
         const rect = itemRef.current.getBoundingClientRect();
@@ -86,7 +91,7 @@ const ProjectItem = ({ project, onClick }) => {
     });
 
     // --- MOBILE BEHAVIOR (Auto-play in Viewport Center) ---
-    mm.add("(max-width: 767px)", () => {
+    mm.add("(max-width: 768px)", () => {
       ScrollTrigger.create({
         trigger: itemRef.current,
         start: "center 55%", // Trigger when center of item hits middle 10% of screen
@@ -121,19 +126,23 @@ const ProjectItem = ({ project, onClick }) => {
     <div 
       ref={itemRef} 
       onClick={() => onClick(project)}
-      className="relative group w-full h-[90px] border-b border-black/10 bg-primary flex items-center px-4 md:px-12 cursor-pointer"
+      className="relative group w-full h-[90px] border-b border-black/10 bg-primary flex items-center px-4 cursor-pointer"
     >
       
       {/* Default State Content */}
       <div ref={textGroupRef} className="w-full flex justify-between items-center z-10 pointer-events-none">
         <div className="flex gap-8 md:gap-16 items-center">
-          <div className="flex flex-col">
+          <div className="flex flex-row items-center gap-5">
+            <span className='opacity-0 group-hover:opacity-100 duration-300'><MoveRight /></span>
             <h5 className={`${textValue}]`}>{project.title}</h5>
           </div>
         </div>
         
-        <div className="hidden md:flex flex-col text-right">
-          <p className="text-sm uppercase font-mono tracking-tight text-black/80">{project.tech}</p>
+        <div className="flex items-center text-right scale-80 md:scale-100 gap-2 md:gap-0">
+          <div>Visit</div>
+          <div className=" w-8 h-8 bg-primary flex items-center justify-center text-black">
+             <ArrowUpRight size={18} />
+          </div>
         </div>
       </div>
 
@@ -154,7 +163,7 @@ const ProjectItem = ({ project, onClick }) => {
       </div>
 
       {/* MOBILE: Auto-play Background Video */}
-      <div ref={mobileMediaRef} className="md:hidden absolute inset-0 w-full h-full opacity-0 pointer-events-none z-0">
+      <div ref={mobileMediaRef} className="lg:hidden absolute inset-0 w-full h-full opacity-0 pointer-events-none z-0">
         <video ref={mobileVideoRef} src={project.video} loop muted playsInline className="w-full h-full object-cover opacity-100" />
         <div className="absolute inset-0 bg-primary/40" /> {/* Wash over video so text remains readable */}
       </div>
@@ -174,7 +183,7 @@ const ProjectSection = () => {
   }, [selectedProject]);
 
   return (
-    <section className='section-box border-t border-black/10 bg-inherit overflow-hidden relative'>
+    <section id='projects-section' className='section-box border-t border-black/10 bg-inherit overflow-hidden relative'>
       <div className='section-title'><p>PROJECTS</p></div>
       
       <div className='inner-section w-full max-w-7xl mx-auto py-20 md:px-6'>
@@ -194,7 +203,7 @@ const ProjectSection = () => {
           onClick={() => setSelectedProject(null)}
         >
           <div 
-            className="relative w-[90%] h-[90%] bg-primary border-[0.5px] border-black/20 flex flex-col md:flex-row shadow-[0_30px_60px_rgba(0,0,0,0.3)] animate-in fade-in zoom-in duration-300"
+            className="relative w-[90%] h-[90%] bg-primary border-[0.5px] border-black/20 flex flex-col lg:flex-row shadow-[0_30px_60px_rgba(0,0,0,0.3)] animate-in fade-in zoom-in duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
@@ -206,7 +215,7 @@ const ProjectSection = () => {
             </button>
 
             {/* Video Section: Top Left Desktop, Top Middle Mobile */}
-            <div className="w-full md:w-[65%] h-[40%] md:h-full bg-black relative border-b md:border-b-0 md:border-r border-black/20">
+            <div className="w-full lg:w-[65%] h-[40%] lg:h-full bg-black relative border-b md:border-b-0 md:border-r border-black/20">
               <video 
                 src={selectedProject.video} 
                 autoPlay 
@@ -218,7 +227,7 @@ const ProjectSection = () => {
             </div>
 
             {/* Details Section */}
-            <div className="w-full md:w-[35%] h-[60%] md:h-full p-6 md:p-12 overflow-y-auto flex flex-col gap-8 bg-primary">
+            <div className="w-full lg:w-[35%] h-[60%] lg:h-full p-6 lg:p-12 overflow-y-auto flex flex-col gap-8 bg-primary">
               <div>
                 <p className="text-[10px] font-mono tracking-[0.3em] text-black/40 mb-2 uppercase">Project Profile</p>
                 <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter leading-[0.9]">{selectedProject.title}</h2>

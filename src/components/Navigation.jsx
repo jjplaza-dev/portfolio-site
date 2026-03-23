@@ -43,19 +43,19 @@ const formattedTime = time.toLocaleTimeString('en-US', {
 
   return (
     <>
-      <nav className='fixed top-5 left-0 w-full h-10 z-[9999] px-4 md:px-10 flex justify-between items-center pointer-events-none'>
+      <nav className='fixed top-2 left-0 w-full h-10 z-[9999] px-2 md:px-2 flex justify-between items-center pointer-events-none'>
         <div className='flex items-center h-full bg-primary pointer-events-auto gap-2'>
           
           {/** Marquee **/}
-          <div className='w-32 md:w-48 h-full border-r border-black/10 overflow-hidden flex items-center bg-black text-white px-2'>
+          <div className='w-32 md:w-48 h-full border-r border-black/10 overflow-hidden flex items-center bg-secondary text-primary px-2'>
             <div className="flex whitespace-nowrap animate-marquee">
-              <span className="text-[9px] font-mono uppercase tracking-widest mr-4">Open to Opportunities —</span>
-              <span className="text-[9px] font-mono uppercase tracking-widest mr-4">Open to Opportunities —</span>
+              <span className="text-[10px] font-mono uppercase tracking-widest mr-4">Open to Opportunities —</span>
+              <span className="text-[10px] font-mono uppercase tracking-widest mr-4">Open to Opportunities —</span>
             </div>
           </div>
 
           {/** Local Time **/}
-          <div className='px-4 flex items-center gap-2 border h-full'>
+          <div className='px-4 flex items-center gap-2 border border-secondary/20 h-full'>
             <span className='text-[12px] font-mono font-bold uppercase tracking-tighter'>
               PST {formattedTime}
             </span>
