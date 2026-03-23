@@ -1,63 +1,44 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 const Works = () => {
-  const myProjects = ["1","2","3","1","2","3","1","2","3"]
+  const pageRef = useRef(null);
+
+  useEffect(() => {
+    // fromTo guarantees the starting position so it never "snaps" in early
+    gsap.fromTo(
+      pageRef.current,
+      { y: '100vh' }, 
+      { 
+        y: '0', 
+        duration: 0.8, 
+        ease: 'power4.out',
+        delay: 0.1 // Gives the browser a tiny buffer to process the render
+      }
+    );
+  }, []);
+
   return (
-    <section className='w-full h-fit px-[10vw] py-5'>
-      <div className='w-full h-fit pt-4 grid grid-cols-1 md:grid-cols-2 gap-5'>
-        {myProjects.map((projects, index) => (
-          <div key={index} className='aspect-[1/0.8] relative bg-base-200 p-5 border-dashed border-base-300 flex flex-col justify-between items-center border-3 lg:border-5 text-black'>
-            <div className='w-full h-full flex justify-center items-center'>
-              <div  
-            style={{ filter: 'drop-shadow(2px 2px #92400e) drop-shadow(-2px -2px #92400e) drop-shadow(2px -2px #92400e) drop-shadow(-2px 2px #92400e)' }}
-            className='w-[80%] lg:w-[60%] aspect-video self-center rounded-lg -rotate-z-[10deg] mb-10 bg-amber-300'>
-              <div className='w-[30%] aspect-square absolute bottom-[-20%] right-[-10%] bg-amber-400 rounded-lg rotate-z-20'></div>
-            </div>
-            </div>
-            <div className='w-full h-10 self-end flex items-center border-1 border-dashed'>Project: {projects}</div>
-          </div>
-        ))} 
+    // 'translate-y-[100vh]' forces it off-screen on the very first frame
+    <div 
+      ref={pageRef} 
+      className="h-screen w-full bg-primary text-black flex flex-col justify-center px-4 md:px-10 translate-y-[100vh] will-change-transform"
+    >
+      <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between border-b border-black pb-8">
+        <h1 className="text-[15vw] md:text-[10vw] font-black uppercase tracking-tighter leading-none">Works</h1>
+        <p className="font-mono text-sm uppercase mb-2 md:mb-4">Selected Projects [3]</p>
       </div>
-     
-      
-    </section>
-  )
-}
 
-const ClippedBox = () => {
-  // A random, abstract polygon shape
-  const randomPath = "polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%)";
-  
-
-  return (
-    <div className="relative w-100 h-64 group">
-      <div 
-        className="absolute inset-0 bg-primary/20 backdrop-blur-sm"
-        style={{ clipPath: randomPath }}
-      />
-
-      <svg 
-        className="absolute inset-0 w-full h-full pointer-events-none" 
-        viewBox="0 0 100 100" 
-        preserveAspectRatio="none"
-      >
-        <polygon
-          points="0 0, 0 100, 100 100,  100 0"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeDasharray="4 2"
-          className="text-primary/50"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
-
-    
-      <div className="relative z-10 flex items-center justify-center h-full font-bold text-primary">
-        ABSTRACT
+      <div className="w-full max-w-7xl mx-auto mt-8 flex flex-col gap-4">
+        {['Digital Archive', 'Static Motion', 'Neural Flow'].map((project, i) => (
+          <div key={i} className="group flex justify-between items-center cursor-pointer hover:bg-black hover:text-white transition-colors p-4 -mx-4">
+            <h2 className="text-3xl md:text-5xl uppercase font-bold tracking-tighter">{project}</h2>
+            <span className="font-mono text-xs opacity-50 group-hover:opacity-100">0{i + 1}</span>
+          </div>
+        ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Works;

@@ -2,101 +2,97 @@ import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Figma, GitGraph, icons, SquareKanban } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const TechStackSection = () => {
-const sectionRef = useRef(null);
+  const sectionRef = useRef(null);
+  const containerRef = useRef(null);
 
-const stacks = [
-{ title: "", items: ["React", "Next", "Tailwind", "GSAP"] },
-{ title: "", items: ["Supabase", "Node", "MongoDB"] },
-{ title: "", items: ["Figma", "VS Studio"] }
-];
-const benefits = [
-{ title: "Web Design", items: ["Unique UI", "No code development", "Visual Identity"], icon:
-<GitGraph />},
-{ title: "Figma to React", items: ["Clean Code", "Pixel Perfect", "Responsive"], icon:
-<Figma />},
-{ title: "Growth & Management", items: ["SEO", "Performance", "Scalability"], icon:
-<SquareKanban />}
-];
+  const stacks = [
+    { title: "Frontend Stack", items: ["React", "Next", "Tailwind", "GSAP"] },
+    { title: "Backend Systems", items: ["Supabase", "Node", "MongoDB"] },
+    { title: "Development Tools", items: ["Figma", "VS Code", "Figma", "Stitch"] }
+  ];
 
-useGSAP(() => {
-const allItems = gsap.utils.toArray('.stack-item');
+  useGSAP(() => {
+    const allItems = gsap.utils.toArray('.stack-item');
 
-gsap.fromTo(allItems,
-{
-opacity: 0,
-x: 0,
-scale: 0.9
-},
-{
-opacity: 1,
-scale: 1,
-duration: 1.5,
-stagger: 0.15,
-ease: "expo.out",
-scrollTrigger: {
-trigger: sectionRef.current,
-start: "top 75%",
-toggleActions: "play none none reverse"
-}
-}
-);
-}, { scope: sectionRef });
+    gsap.fromTo(allItems,
+      { opacity: 0, y: 20, scale: 0.95 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 1,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+  }, { scope: sectionRef });
 
-return (
-<section className='section-box w-screen h-fit grid grid-cols-1 overflow-hidden border-b border-black/50 bg-inherit'>
-  <div ref={sectionRef} className='w-full h-full'>
-    <div className='w-full flex section-title'><p>STACKS AND TOOLS</p></div>
-    <div className='inner-section flex flex-col gap-6 border-x border-black/20'>
+  // Hover Effect: Magnetic Pull
+  const onMouseMove = (e, target) => {
+    const rect = target.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    
+    gsap.to(target, {
+      x: x * 0.2,
+      y: y * 0.2,
+      duration: 0.3,
+      ease: "power2.out"
+    });
+  };
 
-      {stacks.map((stack, sIndex) => (
-      <div key={sIndex} className="flex flex-col gap-4 lg:pl-2">
-        <p className="text-xs uppercase tracking-[0.3em] font-semibold text-primary/70 ml-2">
-          {stack.title}
-        </p>
+  const onMouseLeave = (target) => {
+    gsap.to(target, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+  };
 
-        <div className='flex items-center gap-1'>
-          {stack.items.map((item, iIndex) => (
-          <div key={iIndex}
-            className='stack-item w-24 lg:w-32 aspect-square border-[0.5px] border-black/20 flex justify-center cursor-pointer p-1'>
-            <p className='h-fit w-[90%] text-center border-1 border-black/20 p-1'>{item}</p>
-          </div>
-          ))}
-        </div>
+  return (
+    <section ref={sectionRef} className='section-box border-b border-black/10 bg-inherit overflow-hidden'>
+      <div className='w-full flex section-title'>
+        <div>STACKS AND TOOLS</div>
       </div>
-      ))}
 
-    </div>
-    <div className='inner-section flex flex-col md:flex-row'>
-      {benefits.map((benefit, index) => (
-      <div key={index} className='w-full flex flex-col items-start'>
-        <div className="font-semibold flex gap-4 roboto mb-4 text-neutral/80">
-          <p className='scale-120'>{benefit.icon}</p>{benefit.title}
-        </div>
-        <div className="font-medium text-neutral/70 flex flex-col gap-1 mt-1 w-full">
-          {benefit.items.map((content, i) => (
-          <div key={i} className="pl-2">
-            <p>{content}</p>
-            <div className="w-[40%] lg:w-[80%] h-1 mb-2 mt-1" style={{
-                      backgroundImage: `linear-gradient(to right, oklch(0% 0 0 / 0.15) 50%, transparent 0%)`,
-                      backgroundSize: '15px 1px',
-                      backgroundRepeat: 'repeat-x'
-                    }}></div>
+      <div ref={containerRef} className='inner-section flex flex-col gap-10 border-l border-black/5 ml-4 lg:ml-10'>
+        {stacks.map((stack, sIndex) => (
+          <div key={sIndex} className="flex flex-col gap-6">
+            <div className="flex items-center gap-4">
+              <p className="text-[10px] uppercase tracking-[0.4em] font-bold text-black/40">
+                {stack.title}
+              </p>
+              <div className="h-[1px] flex-grow bg-black/5" />
+            </div>
+
+            <div className='flex flex-wrap gap-4 ml-2'>
+              {stack.items.map((item, iIndex) => (
+                <div 
+                  key={iIndex}
+                  onMouseMove={(e) => onMouseMove(e, e.currentTarget)}
+                  onMouseLeave={(e) => onMouseLeave(e.currentTarget)}
+                  className='stack-item group relative w-20 lg:w-30 aspect-square border-[0.5px] border-black/10 flex flex-col justify-center items-center cursor-crosshair backdrop-blur-sm transition-colors hover:border-black/40'
+                >
+                  <div className="absolute -top-[2px] -left-[2px] w-1 h-1 bg-black opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute -top-[2px] -right-[2px] w-1 h-1 bg-black opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute -bottom-[2px] -left-[2px] w-1 h-1 bg-black opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute -bottom-[2px] -right-[2px] w-1 h-1 bg-black opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                  <span className='text-[10px] text-black/30 mb-2 font-mono'>0{iIndex + 1}</span>
+                  <div className='text-[12px] font-medium tracking-tight uppercase'>{item}</div>
+
+                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:10px_10px]" />
+                </div>
+              ))}
+            </div>
           </div>
-          ))}
-        </div>
+        ))}
       </div>
-      ))}
-    </div>
-
-  </div>
-
-</section>
-);
+    </section>
+  );
 };
 
 export default TechStackSection;

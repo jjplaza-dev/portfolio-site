@@ -5,6 +5,9 @@ import FooterSection from './components/FooterSection';
 import CustomCursor from './designs/CustomCursor';
 import Home from './pages/Home';
 import Works from './pages/Works';
+import About from './pages/About';
+import Contact from './pages/Contact';
+
 
 // Optional: If you create a separate page for project details later
 // import ProjectDetail from './pages/ProjectDetail'; 
@@ -13,7 +16,7 @@ const App = () => {
   const location = useLocation();
 
   return (
-    <div className=" min-h-screen bg-primary">
+    <div className=" min-h-screen bg-primary overflow-x-hidden">
       <Navigation />
       <CustomCursor />
 
@@ -21,6 +24,8 @@ const App = () => {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="works" element={<Works />} />
+          <Route path="about" element={<About />} />
+          <Route path="contact" element={<Contact />} />
         </Routes>
       </main>
 
