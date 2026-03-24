@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
-import HeroSection from '../Components/HeroSection'
-import ProjectSection from '../Components/ProjectSection'
-import CTASection from '../Components/CTASection'
+
+import ProjectSection from '../components/ProjectSection'
+import CTASection from '../components/CTASection'
 import TechStackSection from '../components/TechStackSection'
 import ServicesSection from '../components/ServicesSection';
 import Expertise from '../components/Expertise';
+import HeroSection from '../components/HeroSection';
+
 
 gsap.registerPlugin(ScrollToPlugin);
 const Home = () => {
