@@ -86,11 +86,8 @@ const FooterSection = () => {
         {/* The "Expand This" Line */}
         <div 
           ref={lineRef}
-          className='absolute top-0 left-0 w-0 border-t border-black/20 z-10'
+          className='absolute top-0 left-0 w-0 border-t border-black/20 z-1'
         />
-
-        <div className="absolute -top-1 left-4 w-2 h-2 bg-accent shadow-[0_0_0_2px_#EFECE3] z-20" />
-        <div className="absolute -top-1 right-4 w-2 h-2 bg-accent shadow-[0_0_0_2px_#EFECE3] z-20" />
 
         {/* Marquee Container */}
         <div className='overflow-hidden'>
@@ -103,7 +100,7 @@ const FooterSection = () => {
         </div>
       </div>
 
-      <div className='inner-section border-t mt-5 flex flex-wrap justify-center md:justify-between items-center gap-8'>
+      <div className='border-t border-secondary/20 mt-5 flex flex-wrap justify-center md:justify-between items-center gap-8 pt-5 pb-10 px-5'>
         <div className='flex gap-8 md:gap-16'>
           <a href="/" className={`${linkClass} cursor-effect`}>Home</a>
           <a href="/works" className={`${linkClass} cursor-effect`}>Works</a>

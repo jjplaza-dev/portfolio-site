@@ -10,15 +10,15 @@ import cooklookVideo from '../assets/vidoes/cooklook.mp4'
 gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
-  { id: '001', title: 'Philaya', tech: 'REACT + SUPABASE', 
+  { id: '1', title: 'Philaya', link: "https://philaya.com/",
       details: 'Philaya is a dynamic news and media platform built to merge real-time reporting with modern web interactivity. Unlike static news portals, Philaya delivers a seamless experience through React-driven interfaces and GSAP-enhanced animations that make stories feel alive. Powered by Supabase for structured content management and deployed globally via Vercel with Hostinger domain integration, the system ensures fast delivery, scalability, and responsive design. By combining cutting-edge technology with curated journalism, Philaya positions itself as a forward-looking hub for geopolitics, science, and business.', video: 'https://cdn.coverr.co/videos/coverr-typing-on-a-mechanical-keyboard-3-5244/1080p.mp4' },
-  { id: '002', title: 'Hablonne', tech: 'NEXT.JS + GSAP', 
+  { id: '2', title: 'Hablonne', link: "https://peru-alpaca-102666.hostingersite.com/",
       details: 'Hablonne is a modern heritage-driven fashion platform that fuses cultural craftsmanship with cutting-edge web technology. Unlike static e‑commerce templates, Hablonne delivers an immersive shopping experience through React-powered interfaces and GSAP animations that bring collections to life. Backed by Supabase for real-time data and deployed seamlessly on Vercel with Hostinger domain integration, the system ensures scalability, responsiveness, and global reach. By weaving tradition into a dynamic digital framework, Hablonne positions itself as both a cultural showcase and a sustainable lifestyle brand.', video: hablonneVideo },
-  { id: '003', title: 'Prevhues', tech: 'MONGODB + NODE', 
+  { id: '3', title: 'Prevhues', link: "https://prevhues.vercel.app/",
       details: 'Prevhues is a dynamic design-engine and community library built to bridge the gap between color theory and real-time implementation. Unlike static palette generators, Prevhues allows users to "live-test" colors across the entire application interface instantly.', video: 'https://cdn.coverr.co/videos/coverr-lines-of-code-on-a-screen-2178/1080p.mp4' },
-  { id: '004', title: 'Surveyour', tech: 'THREE.JS + WEBGL',
+  { id: '4', title: 'Surveyour', link: "https://surveyour.vercel.app/",
       details: 'Surveyour is a streamlined survey and polling platform designed to simplify data collection with a focus on user experience and visual impact. The application allows users to create, distribute, and track surveys in real-time', video: 'https://cdn.coverr.co/videos/coverr-abstract-neon-lines-4156/1080p.mp4' },
-  { id: '005', title: 'CookLook', tech: 'VUE + WEBSOCKETS', 
+  { id: '5', title: 'CookLook', link: "https://cooklook.vercel.app/",
       details: 'CookLook is a modern web application designed to bridge the gap between a cluttered pantry and a home-cooked meal. By focusing on "ingredient-first" discovery, the system allows users to input their available supplies and instantly receive curated recipe recommendations, effectively reducing food waste and decision fatigue.', video: cooklookVideo},
 ];
 
@@ -232,11 +232,6 @@ const ProjectSection = () => {
                 <p className="text-[10px] font-mono tracking-[0.3em] text-black/40 mb-2 uppercase">Project Profile</p>
                 <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter leading-[0.9]">{selectedProject.title}</h2>
               </div>
-              
-              <div className="flex flex-col gap-2">
-                <p className="text-[10px] font-mono tracking-[0.3em] text-black/40 uppercase">Technology Stack</p>
-                <p className="text-sm font-bold uppercase tracking-widest">{selectedProject.tech}</p>
-              </div>
 
               <div className="flex flex-col gap-2">
                 <p className="text-[10px] font-mono tracking-[0.3em] text-black/40 uppercase">System Overview</p>
@@ -247,7 +242,7 @@ const ProjectSection = () => {
 
               {/* Action Buttons inside Modal */}
               <div className="mt-auto pt-8 flex gap-4">
-                <a href="#" className="cursor-effect flex-1 bg-black text-white text-[10px] font-bold tracking-[0.2em] text-center uppercase hover:bg-black/80 transition-colors">
+                <a href={selectedProject.link} className="cursor-effect flex-1 bg-black text-white text-[10px] font-bold tracking-[0.2em] text-center uppercase hover:bg-black/80 transition-colors">
                   View Live Site
                 </a>
                 <a href="#" className="cursor-effect flex-1 bg-transparent border border-black/20 text-black text-[10px] font-bold tracking-[0.2em] text-center uppercase hover:bg-black/5 transition-colors">

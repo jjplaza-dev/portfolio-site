@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { supabase } from '../../supabaseClient'
+import { Send, Smile } from 'lucide-react';
 
 const CTASection = () => {
   const sectionRef = useRef(null);
@@ -18,6 +19,7 @@ const CTASection = () => {
   useGSAP(() => {
     gsap.from('.cta-field', {
       y: 30,
+      opacity: 0, // Added opacity fade for smoother entrance
       stagger: 0.1,
       duration: 1,
       ease: "power4.out",
@@ -51,11 +53,8 @@ const CTASection = () => {
     setLoading(false);
   };
 
-  const cornerClass = "absolute w-2 h-2 bg-accent z-10 transition-transform group-focus-within:scale-125";
-  const inputBase = "w-full bg-white/40 backdrop-blur-sm border-[0.5px] border-black/10 p-5 pt-9 text-sm uppercase tracking-tight focus:outline-none focus:border-black/80 transition-colors placeholder:text-black/20";
-
   return (
-    <section ref={sectionRef} className='section-box bg-inherit overflow-hidden'>
+    <section ref={sectionRef} className='section-box bg-inherit overflow-hidden pb-20'>
       <div className='section-title'><p>INITIATE</p></div>
       
       <div className='inner-section flex flex-col items-center gap-20'>
@@ -66,44 +65,85 @@ const CTASection = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className='w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 px-6'>
+        <form onSubmit={handleSubmit} className='w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 px-6'>
         
-          <div className='cta-field group relative'>
-            <div className={`${cornerClass} -top-1 -left-1`} />
-            <input name="name" type="text" required value={formData.name} onChange={handleChange} placeholder="NAME*" className={inputBase} />
+          <div className='cta-field flex flex-col gap-2'>
+            <label className="font-mono text-[10px] uppercase opacity-100">Your Name*</label>
+            <input 
+              name="name" 
+              type="text" 
+              required 
+              value={formData.name} 
+              onChange={handleChange} 
+              placeholder="John Doe" 
+              className="bg-transparent border-b border-black/10 py-2 focus:border-black outline-none transition-colors"
+            />
           </div>
 
-          <div className='cta-field group relative'>
-            <div className={`${cornerClass} -top-1 -right-1`} />
-            <input name="email" type="email" required value={formData.email} onChange={handleChange} placeholder="EMAIL*" className={inputBase} />
+          <div className='cta-field flex flex-col gap-2'>
+            <label className="font-mono text-[10px] uppercase opacity-100">Email Address*</label>
+            <input 
+              name="email" 
+              type="email" 
+              required 
+              value={formData.email} 
+              onChange={handleChange} 
+              placeholder="hello@provider.com" 
+              className="bg-transparent border-b border-black/10 py-2 focus:border-black outline-none transition-colors"
+            />
           </div>
 
-          <div className='cta-field group relative'>
-            <input name="company" type="text" value={formData.company} onChange={handleChange} placeholder="COMPANY" className={inputBase} />
+          <div className='cta-field flex flex-col gap-2'>
+            <label className="font-mono text-[10px] uppercase opacity-100">Company Name</label>
+            <input 
+              name="company" 
+              type="text" 
+              value={formData.company} 
+              onChange={handleChange} 
+              placeholder="My Company" 
+              className="bg-transparent border-b border-black/10 py-2 focus:border-black outline-none transition-colors"
+            />
           </div>
 
-          <div className='cta-field group relative'>
-            <input name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="PHONE" className={inputBase} />
+          <div className='cta-field flex flex-col gap-2'>
+            <label className="font-mono text-[10px] uppercase opacity-100">Phone Number</label>
+            <input 
+              name="phone" 
+              type="tel" 
+              value={formData.phone} 
+              onChange={handleChange} 
+              placeholder="+1 (555) 000-0000" 
+              className="bg-transparent border-b border-black/10 py-2 focus:border-black outline-none transition-colors"
+            />
           </div>
 
-          <div className='cta-field group relative md:col-span-2'>
-            <div className={`${cornerClass} -bottom-1 -left-1`} />
-            <div className={`${cornerClass} -bottom-1 -right-1`} />
-            <textarea name="inquiry" rows="5" required value={formData.inquiry} onChange={handleChange} placeholder="INQUIRY*" className={`${inputBase} resize-none`} />
+          <div className='cta-field flex flex-col gap-2 md:col-span-2'>
+            <label className="font-mono text-[10px] uppercase opacity-100">Inquiry*</label>
+            <textarea 
+              name="inquiry" 
+              rows="4" 
+              required 
+              value={formData.inquiry} 
+              onChange={handleChange} 
+              placeholder="Tell me about your vision..." 
+              className="bg-transparent border-b border-black/10 py-2 focus:border-black outline-none transition-colors resize-none"
+            />
           </div>
 
-          <div className='md:col-span-2 flex flex-col items-center gap-4 mt-4'>
-            <button 
-              type="submit"
-              disabled={loading}
-              className='group relative w-full md:w-1/2 py-8 bg-primary hover:bg-accent hover:border-primary hover:text-primary text-secondary border-accent border-2 uppercase tracking-[0.4em] text-sm font-bold transition-all active:scale-[0.98] disabled:opacity-50'
-            >
-              <div className="absolute -top-1 -left-1 w-2 h-2 bg-accent shadow-[0_0_0_2px_#EFECE3]" />
-              <div className="absolute -bottom-1 -right-1 w-2 h-2 bg-accent shadow-[0_0_0_2px_#EFECE3]" />
-              {loading ? "TRANSMITTING..." : "SEND MESSAGE"}
-            </button>
+          <div className='cta-field md:col-span-2 flex flex-col items-center gap-4 mt-8'>
+           <button 
+                    disabled={loading === true}
+                    type="submit"
+                    className="flex w-full items-center justify-center gap-4 bg-black text-white py-6 uppercase font-bold tracking-widest hover:bg-black/90 transition-all disabled:opacity-50"
+                  >
+                    {loading === true ? 'Sending...' : 'Send Message'}
+                    <Send size={18} />
+                  </button>
+                  {loading === 'error' && (
+                    <p className="text-red-500 font-mono text-xs text-center">Something went wrong. Please try again.</p>
+                  )}
 
-            {status === 'success' && <p className='text-[10px] font-mono text-blue-600 tracking-widest'>MESSAGE SENT</p>}
+            {status === 'success' && <p className='text-[10px] font-mono text-blue-600 tracking-widest flex gap-2'>MESSAGE SENT <Smile /></p>}
             {status === 'error' && <p className='text-[10px] font-mono text-red-500 tracking-widest'>MESSAGE FAILED. RETRY</p>}
           </div>
         </form>

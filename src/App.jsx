@@ -9,9 +9,6 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 
 
-// Optional: If you create a separate page for project details later
-// import ProjectDetail from './pages/ProjectDetail'; 
-
 const App = () => {
   const location = useLocation();
 

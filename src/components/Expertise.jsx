@@ -62,7 +62,7 @@ const Expertise = () => {
       <div ref={boundsRef} className='inner-section grid grid-cols-1 xl:grid-cols-2'>
         
         <div className='text-[clamp(1.2rem,2vw,2rem)] px-10 pb-10 text-center lg:text-start pointer-events-none'>
-          I blend product thinking, design craft, vibe coding speed, and AI workflows to ship better work, faster.
+          I design with rhythm and build with intent. By pairing AI augmented workflows with deep design craft, I create modern frontend experiences that engage through motion. It is a fusion of GSAP driven fluidity and structural clarity shipping interfaces that do not just function, but move and connect.
         </div>
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-x-1 gap-y-5'>

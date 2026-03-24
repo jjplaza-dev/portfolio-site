@@ -41,7 +41,7 @@ const HeroSection = () => {
 
   }, { scope: sectionRef });
 
-  const myText = "I am this I am that, chuchu Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet, minus nisi veniam iusto nulla."
+  const myText = "Creative Dev & Designer. Merging design-led craft with AI-augmented frontend architecture. I help brands find their digital rhythm, then ship the most engaging way to move through it."
   const dragClass = "drag-item w-fit h-fit px-2 box-border border border-transparent hover:border-accent cursor-grab active:cursor-grabbing z-20";
 
   return (
@@ -61,7 +61,7 @@ const HeroSection = () => {
               <div className={`w-fit h-fit lg:px-2 box-border border border-transparent hover:border-accent group ${dragClass}`}>
                 <FourCorners />
                 JURIST</div>
-              <div className={`w-[50%] w-[50%] xl:w-[50%] md:max-w-[280px] h-fit translate-0 lg:translate-x-[50%] xl:translate-x-0 hidden md:flex items-center border border-transparent hover:border-accent p-1 text-lg tracking-normal leading-5 group ${dragClass}`}><FourCorners />{myText}</div>
+              <div className={`max-lg:absolute right-0 translate-x-[25%] w-[60%] lg:w-[80%] xl:w-[50%] md:max-w-[360px] h-fit translate-0 lg:translate-x-[50%] xl:translate-x-0 hidden md:flex items-center border border-transparent hover:border-accent p-1 text-[16px] font-normal tracking-normal leading-5 group ${dragClass}`}><FourCorners />{myText}</div>
             </div>
             <div className='hero-name w-full flex max-md:justify-center md:w-[40%]  md:translate-x-[50%] lg:translate-x-1/2'>
             <div className={`w-fit h-fit px-2 box-border border border-transparent hover:border-accent group ${dragClass}`}><FourCorners/>JOHN</div>
