@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@plugin "daisyui";
+
 
 html {
     background-image:  var(--color-primary);
